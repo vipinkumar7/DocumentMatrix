@@ -1,0 +1,4 @@
+documentmatrix/target/*
+documentmatrix/.settings/*
+documentmatrix/.project/*
+documentmatrix/.classpath/*
