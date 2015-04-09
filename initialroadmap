@@ -1,0 +1,5 @@
+1. The first main idea is all Analytics Dashboard needs very fast read 
+2. All data calls  should be through http verbs  
+3. Have to see both cassandra and hbase 
+4. We dont have to aggregation as of now
+5. just select data based on criteria
