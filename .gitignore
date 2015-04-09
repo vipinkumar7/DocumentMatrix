@@ -1,4 +1,5 @@
 documentmatrix/target/*
 documentmatrix/.settings/*
-documentmatrix/.project/*
-documentmatrix/.classpath/*
+documentmatrix/.project
+documentmatrix/.classpath
+documentmatrix/bin/*
