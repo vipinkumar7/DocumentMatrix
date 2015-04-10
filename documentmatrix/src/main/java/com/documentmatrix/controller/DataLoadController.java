@@ -30,7 +30,6 @@ public class DataLoadController
     public String loadData(@RequestBody FileObject fileObject)
     {
         LOG.info( "Loading data to cassandra" );
-        
         return null;
     }
     
