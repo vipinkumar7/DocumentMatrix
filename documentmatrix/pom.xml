@@ -133,6 +133,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${war.plugin}</version>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>

@@ -1,13 +1,12 @@
 package com.documentmatrix.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
+import org.springframework.web.bind.annotation.RestController;
 import com.documentmatrix.metadata.FileObject;
+import org.springframework.http.HttpStatus;
 /**
  * 
  * @author Vipin Kumar
@@ -17,13 +16,18 @@ import com.documentmatrix.metadata.FileObject;
  *
  */
 
-@Controller
-@RequestMapping("/load")
+@RestController
 public class DataLoadController
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( DataLoadController.class );
     
+    @RequestMapping(value="/dat" ,method=RequestMethod.GET)
+    public String loadData()
+    {
+        LOG.info( "Loading data to cassandra" );
+        return "hello";
+    }
     
     @RequestMapping(value="/data" ,method=RequestMethod.PUT)
     @ResponseStatus(HttpStatus.CREATED)

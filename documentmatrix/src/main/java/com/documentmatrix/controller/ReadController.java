@@ -1,6 +1,7 @@
 package com.documentmatrix.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
@@ -11,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  */
 
-@RequestMapping("/query")
+@RestController
 public class ReadController
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( ReadController.class );
     
     
-    
+   
     
     
     
