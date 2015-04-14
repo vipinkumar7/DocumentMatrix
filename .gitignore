@@ -3,3 +3,5 @@ documentmatrix/.settings/*
 documentmatrix/.project
 documentmatrix/.classpath
 documentmatrix/bin/*
+documentmatrix/WebContent/*
+documentmatrix/META-INF/*
