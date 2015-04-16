@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.documentmatrix.metadata.FileObject;
 import org.springframework.http.HttpStatus;
+
+
 /**
  * 
  * @author Vipin Kumar
@@ -21,20 +23,22 @@ public class DataLoadController
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( DataLoadController.class );
-    
-    @RequestMapping(value="/dat" ,method=RequestMethod.GET)
+
+
+    @RequestMapping ( value = "/dat", method = RequestMethod.GET)
     public String loadData()
     {
         LOG.info( "Loading data to cassandra" );
         return "hello";
     }
-    
-    @RequestMapping(value="/data" ,method=RequestMethod.PUT)
-    @ResponseStatus(HttpStatus.CREATED)
-    public String loadData(@RequestBody FileObject fileObject)
+
+
+    @RequestMapping ( value = "/data", method = RequestMethod.PUT)
+    @ResponseStatus ( HttpStatus.CREATED)
+    public String loadData( @RequestBody FileObject fileObject )
     {
         LOG.info( "Loading data to cassandra" );
         return null;
     }
-    
+
 }

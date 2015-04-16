@@ -1,9 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.documentmatrix</groupId>
+	<version>1.0</version>
 	<artifactId>documentmatrix-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>documentmatrix:server</name>
 	<packaging>war</packaging>
 
@@ -20,13 +21,13 @@
 		<spring-framework.version>4.1.6.RELEASE</spring-framework.version>
 		<!-- Hibernate / JPA -->
 		<hibernate.version>4.3.8.Final</hibernate.version>
+		<jackson.databind-version>2.5.2</jackson.databind-version>
+		<war.plugin>2.6</war.plugin>
 		<!-- Logging -->
 		<slf4j.version>1.7.12</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<!-- Test -->
 		<junit.version>4.12</junit.version>
-		<jackson.databind-version>2.5.2</jackson.databind-version>
-		<war.plugin>2.6</war.plugin>
 	</properties>
 
 	<dependencies>
@@ -64,21 +65,6 @@
 			<version>${spring-framework.version}</version>
 		</dependency>
 
-		<!-- Logging with SLF4J & LogBack -->
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -86,6 +72,32 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.databind-version}</version>
+		</dependency>
+
+		<!-- hector -->
+		<dependency>
+			<groupId>org.hectorclient</groupId>
+			<artifactId>hector-core</artifactId>
+			<version>2.0-1-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Logging with SLF4J & Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- Test Artifacts -->
 		<dependency>
@@ -99,21 +111,6 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- hector -->
-		<dependency>
-			<groupId>org.hectorclient</groupId>
-			<artifactId>hector-core</artifactId>
-			<version>2.0-1-SNAPSHOT</version>
-		</dependency>
-
-
-		<!-- Jackson -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.databind-version}</version>
 		</dependency>
 	</dependencies>
 
@@ -133,7 +130,6 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${war.plugin}</version>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>
