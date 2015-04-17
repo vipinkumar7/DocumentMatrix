@@ -15,19 +15,19 @@
  *limitations under the License.
  *
  */
-package com.documentmatrix.cassandra.service;
-
-import me.prettyprint.cassandra.dao.SimpleCassandraDao;
+package com.documentmatrix.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.documentmatrix.factory.CassandraDaoFactory;
 
 
 /**
  * @author "Swaraj Kumar"
  * @created 16-Apr-2015
  *
- * TODO: Write a quick description of what the class is supposed to do.
+ * Cassandra Repository for read operation.
  *
  */
 @Repository
@@ -37,7 +37,7 @@ public class CassandraReadRepository
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( CassandraReadRepository.class );
 
     @Autowired
-    SimpleCassandraDao columnFamilyDao;
+    CassandraDaoFactory cassandraDaoFactory;
 
 
     /**
@@ -47,8 +47,9 @@ public class CassandraReadRepository
      */
     public String readByColumnAndValue( String columnName, String value )
     {
-        LOG.trace( "Method: readByColumnAndValue called." );
-        System.out.println( "DAO found" + columnFamilyDao.toString() );
+        /* LOG.trace( "Method: readByColumnAndValue called." );
+         System.out.println( "DAO found" + columnFamilyDao.toString() );*/
+        System.out.println( cassandraDaoFactory );
         return "flfkjkflfkl";
     }
 }

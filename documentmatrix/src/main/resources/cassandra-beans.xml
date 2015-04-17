@@ -4,6 +4,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:cassandra.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
 	<!-- Hector configuration for spring dependencies -->
 	<bean id="cassandraHostConfigurator"
 		class="me.prettyprint.cassandra.service.CassandraHostConfigurator">
@@ -16,16 +26,5 @@
 	<bean id="consistencyLevelPolicy"
 		class="me.prettyprint.cassandra.model.ConfigurableConsistencyLevel">
 		<property name="defaultReadConsistencyLevel" value="ONE" />
-	</bean>
-	<bean id="keyspace" class="me.prettyprint.hector.api.factory.HFactory"
-		factory-method="createKeyspace">
-		<constructor-arg value="test" />
-		<constructor-arg ref="cluster" />
-		<constructor-arg ref="consistencyLevelPolicy" />
-	</bean>
-
-	<bean id="columnFamilyDao" class="me.prettyprint.cassandra.dao.SimpleCassandraDao">
-		<property name="keyspace" ref="keyspace" />
-		<property name="columnFamilyName" value="family1" />
 	</bean>
 </beans>
