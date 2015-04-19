@@ -5,3 +5,5 @@ documentmatrix/.classpath
 documentmatrix/bin/*
 documentmatrix/WebContent/*
 documentmatrix/META-INF/*
+documentmatrix-analytics/target/
+documentmatrix-analytics/.idea/
