@@ -14,6 +14,8 @@ import javax.imageio.ImageIO;
  * Created by root on 28/9/15.
  */
 public class ImageHash {
+
+    static int  AVERAGE =0;
     public static BufferedImage getResizedImage(String imageFile) throws IOException {
 
         BufferedImage bufferedImage = ImageIO.read(new File(imageFile));
@@ -87,25 +89,30 @@ public class ImageHash {
     }
     public static int [][] getMatrix(BufferedImage image) {
 
+        long total=0,average=0;
         int [][] values=new int[image.getWidth()][image.getHeight()];
         for (int w = 0; w < image.getWidth(); w++) {
             for (int h = 0; h < image.getHeight(); h++) {
                 values[w][h]=(image.getRGB(w,h)&0xff);
+                average+=values[w][h];
+                total++;
             }
         }
+        AVERAGE/=total;
         return values;
     }
 
-    public static void getHash(int[][] matrix, int width, int height, int average) {
+    public static String getHash(int[][] matrix, int width, int height, int average) {
         String hash = "";
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 hash += matrix[i][j] > average ? 1 : 0;
             }
         }
+        return hash;
     }
 
-    public int getHammingDistance(String one, String two) {
+    public static  int getHammingDistance(String one, String two) {
         if (one.length() != two.length()) {
             return -1;
         }

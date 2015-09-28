@@ -6,13 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Vipin Kumar on 21/9/15.
  */
 public class Test {
 
-    private static Map< Long,String> imageHistory = new HashMap<>();
+    private static Map<String, String> imageHistory = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
 
@@ -28,19 +29,32 @@ public class Test {
         for (File file : files) {
             BufferedImage bufferedImage = ImageHash.getResizedImage(file.getAbsolutePath());
             bufferedImage = ImageHash.getGrayScale(bufferedImage);
-            long t = ImageHash.getHash(bufferedImage);
-            imageHistory.put( t,file.getName());
-            ImageIO.write(bufferedImage, "png", new File("/home/vipin/out" + File.separator + file.getName().split("//.")[0]+".png"));
+            int m[][] = ImageHash.getMatrix(bufferedImage);
+            String t = ImageHash.getHash(m, 64, 64, ImageHash.AVERAGE);
+            imageHistory.put(t, file.getName());
+            ImageIO.write(bufferedImage, "png", new File("/home/vipin/out" + File.separator + file.getName().split("//.")[0] + ".png"));
         }
 
     }
 
-    public static void checkImageHash(String file) throws  Exception
-    {
+    public static void checkImageHash(String file) throws Exception {
         BufferedImage bufferedImage = ImageHash.getResizedImage(file);
         bufferedImage = ImageHash.getGrayScale(bufferedImage);
-        long t = ImageHash.getHash(bufferedImage);
-        System.out.println(imageHistory.get(t));
+        int m[][] = ImageHash.getMatrix(bufferedImage);
+        String t = ImageHash.getHash(m, 64, 64, ImageHash.AVERAGE);
+
+        Set<String> keys = imageHistory.keySet();
+
+        int min = Integer.MAX_VALUE;
+        String out = "";
+        for (String key : keys) {
+            int c = ImageHash.getHammingDistance(key, t);
+            if (c < min) {
+                out = imageHistory.get(key);
+                min=c;
+            }
+        }
+        System.out.println(out);
     }
 
     public static void firs(String[] args) {
