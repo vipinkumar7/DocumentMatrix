@@ -1,5 +1,8 @@
-1. The first main idea is all Analytics Dashboard needs very fast read 
-2. All data calls  should be through http verbs  
-3. Have to see both cassandra and hbase 
-4. We dont have to aggregation as of now
-5. just select data based on criteria
+Document Matrix
+
+This project is written for implementing different research paper for finding similarity b/w documents 
+
+A document can be Text file of any type containing images 
+
+The aim is to categorize them accoring to similarity
+
