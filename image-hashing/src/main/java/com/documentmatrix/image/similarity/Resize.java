@@ -1,4 +1,4 @@
-package com.documentmatrix.resize;
+package com.documentmatrix.image.similarity;
 
 
 

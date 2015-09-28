@@ -1,4 +1,4 @@
-package com.documentmatrix.resize;
+package com.documentmatrix.image.similarity;
 
 import javax.imageio.ImageIO;
 import java.awt.image.*;
@@ -28,7 +28,7 @@ public class Test {
         for (File file : files) {
             BufferedImage bufferedImage = ImageHash.getResizedImage(file.getAbsolutePath());
             bufferedImage = ImageHash.getGrayScale(bufferedImage);
-            long t = ImageHash.gethash(bufferedImage);
+            long t = ImageHash.getHash(bufferedImage);
             imageHistory.put( t,file.getName());
             ImageIO.write(bufferedImage, "png", new File("/home/vipin/out" + File.separator + file.getName().split("//.")[0]+".png"));
         }
@@ -39,7 +39,7 @@ public class Test {
     {
         BufferedImage bufferedImage = ImageHash.getResizedImage(file);
         bufferedImage = ImageHash.getGrayScale(bufferedImage);
-        long t = ImageHash.gethash(bufferedImage);
+        long t = ImageHash.getHash(bufferedImage);
         System.out.println(imageHistory.get(t));
     }
 
