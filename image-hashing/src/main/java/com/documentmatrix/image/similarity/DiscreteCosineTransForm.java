@@ -6,7 +6,13 @@ package com.documentmatrix.image.similarity;
 public class DiscreteCosineTransForm {
 
 
-
+    /**
+     * DCT separates he image into collection of frequencies and scalars
+     * convert to @size x @size DCT
+     * @param matrix
+     * @param size
+     * @return
+     */
     public static double[][] applyDCT(double[][] matrix, int size) {
 
         double[] A = new double[size];

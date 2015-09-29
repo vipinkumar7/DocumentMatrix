@@ -7,7 +7,7 @@ package com.documentmatrix.image.similarity;
  * This class is dedicated for implementation of Bilinear  Interpolation
  * Created by Vipin Kumar on 21/9/15.
  */
-public class Resize {
+public class BilinearInterpolation {
 
     /**
      * Bilinear interpolation
