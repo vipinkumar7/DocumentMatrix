@@ -7,3 +7,7 @@ documentmatrix/WebContent/*
 documentmatrix/META-INF/*
 documentmatrix-analytics/target/
 documentmatrix-analytics/.idea/
+documentmatrix-sentinel/target/*
+documentmatrix-sentinel/.project
+documentmatrix-sentinel/.settings/*
+documentmatrix-sentinel/.classpath
