@@ -13,105 +13,92 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
 
 /**
  * 
  * @author Vipin Kumar
  * @created 29-Jan-2016
  * 
- * TODO: Write a quick description of what the class is supposed to do.
+ *          TODO: Write a quick description of what the class is supposed to do.
  *
  */
 @Configuration
-@ComponentScan ( basePackages = { "com.sentinel.service" })
-//TODO
+@ComponentScan(basePackages = { "com.sentinel.service" })
+// TODO
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @EnableWebSecurity
-public class SecSecurityConfig extends WebSecurityConfigurerAdapter
-{
+public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-   // @Autowired
-    //private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
+	// @Autowired
+	// private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-    //@Autowired
-    //private AuthenticationFailureHandler authenticationFailureHandler;
+	// @Autowired
+	// private AuthenticationFailureHandler authenticationFailureHandler;
 
+	public SecSecurityConfig() {
+		super();
+	}
 
-    public SecSecurityConfig()
-    {
-        super();
-    }
+	@Override
+	protected void configure(final AuthenticationManagerBuilder auth)
+			throws Exception {
+		auth.eraseCredentials(false);// so we can read them in controllers
+		auth.authenticationProvider(authProvider());
+	}
 
+	@Override
+	public void configure(final WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/resources/**");
+	}
 
-    @Override
-    protected void configure( final AuthenticationManagerBuilder auth ) throws Exception
-    {
-        auth.authenticationProvider( authProvider() );
-    }
+	@Override
+	protected void configure(final HttpSecurity http) throws Exception {
+		// @formatter:off
+		http.csrf()
+				.disable()
+				.authorizeRequests()
+				.antMatchers("/login*", "/login*", "/logout*", "/signin/**",
+						"/signup/**")
+				.permitAll()
+				.antMatchers("/invalidSession*")
+				.anonymous()
+				// .antMatchers( "/graph/*").access(
+				// "hasRole('ROLE_RIGHT_access_management_screens" )
+				// .antMatchers( "/graph/**").hasRole( "READ_PRIVILEGE" )
+				.anyRequest()
+				.authenticated()
+				.and()
+				.formLogin()
+				.loginProcessingUrl("/login")
+				// .loginPage("/login")
+				.defaultSuccessUrl("/homepage.html")
+				.failureUrl("/login?error=true")
+				// .successHandler(myAuthenticationSuccessHandler)
+				// .failureHandler(authenticationFailureHandler)
+				.permitAll().and().sessionManagement()
+				.invalidSessionUrl("/invalidSession.html").sessionFixation()
+				.none().and().logout().invalidateHttpSession(false)
+				.logoutSuccessUrl("/logout.html?logSucc=true")
+				.deleteCookies("JSESSIONID").permitAll();
+		// @formatter:on
+	}
 
+	// beans
 
-    @Override
-    public void configure( final WebSecurity web ) throws Exception
-    {
-        web.ignoring().antMatchers( "/resources/**" );
-    }
+	@Bean
+	public DaoAuthenticationProvider authProvider() {
+		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService);
+		authProvider.setPasswordEncoder(encoder());
+		return authProvider;
+	}
 
-
-    @Override
-    protected void configure( final HttpSecurity http ) throws Exception
-    {
-        // @formatter:off
-        http
-            .csrf().disable()
-            .authorizeRequests()
-                .antMatchers("/login*","/login*", "/logout*", "/signin/**", "/signup/**").permitAll()
-                .antMatchers("/invalidSession*").anonymous()
-              //  .antMatchers( "/graph/*").access( "hasRole('ROLE_RIGHT_access_management_screens" )
-                .anyRequest().authenticated()
-                .and()
-            .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/homepage.html")
-                .failureUrl("/login?error=true")
-               // .successHandler(myAuthenticationSuccessHandler)
-               // .failureHandler(authenticationFailureHandler)
-            .permitAll()
-                .and()
-            .sessionManagement()
-                .invalidSessionUrl("/invalidSession.html")
-                .sessionFixation().none()
-            .and()
-            .logout()
-                .invalidateHttpSession(false)
-                .logoutSuccessUrl("/logout.html?logSucc=true")
-                .deleteCookies("JSESSIONID")
-                .permitAll();
-     // @formatter:on
-    }
-
-
-    // beans
-
-    @Bean
-    public DaoAuthenticationProvider authProvider()
-    {
-        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService( userDetailsService );
-        authProvider.setPasswordEncoder( encoder() );
-        return authProvider;
-    }
-
-
-    @Bean
-    public PasswordEncoder encoder()
-    {
-        return new BCryptPasswordEncoder( 11 );
-    }
+	@Bean
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder(11);
+	}
 
 }

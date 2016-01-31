@@ -11,115 +11,104 @@ import com.tinkerpop.frames.FramedGraph;
 import com.tinkerpop.frames.FramedGraphFactory;
 import com.tinkerpop.frames.VertexFrame;
 
-
 /**
  * schema hybrid
+ * 
  * @author Vipin Kumar
  *
  */
-public class TypedElementExample extends AbstractExample
-{
+public class TypedElementExample extends AbstractExample {
 
-    public static final String NAME_CHANDLER = "Chandler";
-    public static final String NAME_JOEY = "Joey";
-    public static final String NAME_ROSS = "Ross";
+	public static final String NAME_CHANDLER = "Chandler";
+	public static final String NAME_JOEY = "Joey";
+	public static final String NAME_ROSS = "Ross";
 
+	public TypedElementExample(String url) {
+		super(url);
+	}
 
-    public TypedElementExample( String url )
-    {
-        super( url );
-    }
+	@Override
+	protected void runGraphExamples(OrientGraphFactory graphFactory) {
+		OrientGraph graph = graphFactory.getTx();
+		FramedGraphFactory factory = new FramedGraphFactory();
+		FramedGraph manager = factory.create(graph);
+		try {
+			populateData(graph, manager);
+			findData(graph, manager);
+		} finally {
+			graph.shutdown();
+		}
+	}
 
+	private void populateData(OrientGraph graph, FramedGraph manager) {
+		Person chandler = (Person) manager.frame(graph.addVertex(null),
+				Person.class);
+		chandler.setName(NAME_CHANDLER);
+		chandler.setAge(12);
 
-    @Override
-    protected void runGraphExamples( OrientGraphFactory graphFactory )
-    {
-        OrientGraph graph = graphFactory.getTx();
-        FramedGraphFactory factory = new FramedGraphFactory();
-        FramedGraph manager = factory.create( graph );
-        try {
-            populateData( graph, manager );
-            findData( graph, manager );
-        } finally {
-            graph.shutdown();
-        }
-    }
+		Person joey = (Person) manager.frame(graph.addVertex(null),
+				Person.class);
+		joey.setName(NAME_JOEY);
+		joey.setAge(15);
 
+		Person ross = (Person) manager.frame(graph.addVertex(null),
+				Person.class);
+		ross.setName(NAME_ROSS);
+		ross.setAge(14);
 
-    private void populateData( OrientGraph graph, FramedGraph manager )
-    {
-        Person chandler = (Person) manager.frame( graph.addVertex( null ), Person.class );
-        chandler.setName( NAME_CHANDLER );
-        chandler.setAge( 12 );
+		chandler.addKnowsPerson(joey);
+		chandler.addKnowsPerson(ross);
+		ross.addKnowsPerson(joey);
+		ross.addKnowsPerson(chandler);
+		joey.addKnowsPerson(ross);
+		joey.addKnowsPerson(chandler);
+		graph.commit();
+	}
 
-        Person joey = (Person) manager.frame( graph.addVertex( null ), Person.class );
-        joey.setName( NAME_JOEY );
-        joey.setAge( 15 );
+	private void findData(OrientGraph graph, FramedGraph manager) {
+		Person chandler = findPersonByName(graph, manager, NAME_CHANDLER);
+		System.out.printf("Found Chandler: %s%n", chandler);
 
-        Person ross = (Person) manager.frame( graph.addVertex( null ), Person.class );
-        ross.setName( NAME_ROSS );
-        ross.setAge( 14 );
+		VertexFrame chandlerFrame = (VertexFrame) chandler;
+		Vertex chandlerVertex = chandlerFrame.asVertex();
+		System.out.printf("Vertex: %s%n", chandlerVertex);
 
-        chandler.addKnowsPerson( joey );
-        chandler.addKnowsPerson( ross );
-        ross.addKnowsPerson( joey );
-        ross.addKnowsPerson( chandler );
-        joey.addKnowsPerson( ross );
-        joey.addKnowsPerson( chandler );
-        graph.commit();
-    }
+		Person ross = findPersonByName(graph, manager, NAME_ROSS);
+		System.out.printf("Found Ross: %s%n", ross);
 
+		Person joey = findPersonByName(graph, manager, NAME_JOEY);
+		System.out.printf("Found Joey: %s%n", joey);
 
-    private void findData( OrientGraph graph, FramedGraph manager )
-    {
-        Person chandler = findPersonByName( graph, manager, NAME_CHANDLER );
-        System.out.printf( "Found Chandler: %s%n", chandler );
+		checkKnows(chandler, ross, joey);
+		checkKnows(ross, chandler, joey);
+		checkKnows(joey, ross, chandler);
+	}
 
-        VertexFrame chandlerFrame = (VertexFrame) chandler;
-        Vertex chandlerVertex = chandlerFrame.asVertex();
-        System.out.printf( "Vertex: %s%n", chandlerVertex );
+	Person findPersonByName(OrientGraph graph, FramedGraph manager, String name) {
+		for (Vertex vertex : graph.getVertices()) {
+			Person person = (Person) manager.frame(vertex, Person.class);
+			if (person.getName().equals(name)) {
+				return person;
+			}
+		}
+		return null;
+	}
 
-        Person ross = findPersonByName( graph, manager, NAME_ROSS );
-        System.out.printf( "Found Ross: %s%n", ross );
+	Map<String, Person> getKnown(Person person) {
+		Map<String, Person> people = new HashMap<String, Person>();
 
-        Person joey = findPersonByName( graph, manager, NAME_JOEY );
-        System.out.printf( "Found Joey: %s%n", joey );
+		for (Person p : person.getKnowsPeople())
+			people.put(p.getName(), p);
+		return people;
+	}
 
-        checkKnows( chandler, ross, joey );
-        checkKnows( ross, chandler, joey );
-        checkKnows( joey, ross, chandler );
-    }
-
-
-    Person findPersonByName( OrientGraph graph, FramedGraph manager, String name )
-    {
-        for ( Vertex vertex : graph.getVertices() ) {
-            Person person = (Person) manager.frame( vertex, Person.class );
-            if ( person.getName().equals( name ) ) {
-                return person;
-            }
-        }
-        return null;
-    }
-
-
-    Map<String, Person> getKnown( Person person )
-    {
-        Map<String, Person> people = new HashMap<String, Person>();
-
-        for ( Person p : person.getKnowsPeople() )
-            people.put( p.getName(), p );
-        return people;
-    }
-
-
-    void checkKnows( Person person, Person... others )
-    {
-        Map<String, Person> people = new HashMap<String, Person>( getKnown( person ) );
-        Preconditions.checkArgument( people.size() == others.length );
-        for ( Person other : others ) {
-            people.remove( other.getName() );
-        }
-        Preconditions.checkArgument( people.isEmpty() );
-    }
+	void checkKnows(Person person, Person... others) {
+		Map<String, Person> people = new HashMap<String, Person>(
+				getKnown(person));
+		Preconditions.checkArgument(people.size() == others.length);
+		for (Person other : others) {
+			people.remove(other.getName());
+		}
+		Preconditions.checkArgument(people.isEmpty());
+	}
 }

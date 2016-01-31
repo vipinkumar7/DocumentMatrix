@@ -7,23 +7,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 
-
 @Configuration
-@ComponentScan ( basePackages = { "com.sentinel" })
-public class AppConfig
-{
+@ComponentScan(basePackages = { "com.sentinel" })
+public class AppConfig {
 
-    @Autowired
-    private Environment env;
+	@Autowired
+	private Environment env;
 
+	// beans
 
-    // beans
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer()
-    {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer propertyPlaceHolderConfigurer() {
+		return new PropertySourcesPlaceholderConfigurer();
+	}
 
 }

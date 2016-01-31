@@ -15,66 +15,70 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.sentinel.service.UserProfileService;
 
-
 /**
  * @author Vipin Kumar
  * @created 28-Jan-2016
  * 
- * TODO: Write a quick description of what the class is supposed to do.
+ *          TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-public class VedetteAuthenticationProvider implements AuthenticationProvider
-{
+public class VedetteAuthenticationProvider implements AuthenticationProvider {
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( VedetteAuthenticationProvider.class );
+	private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger
+			.getLogger(VedetteAuthenticationProvider.class);
 
+	private UserProfileService userProfileService;
 
-    private UserProfileService userProfileService;
+	@Autowired
+	public VedetteAuthenticationProvider(UserProfileService userProfileService) {
+		this.userProfileService = userProfileService;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.springframework.security.authentication.AuthenticationProvider#
+	 * authenticate(org.springframework.security.core.Authentication)
+	 */
+	@Override
+	public Authentication authenticate(Authentication authentication)
+			throws AuthenticationException {
+		LOG.trace("Method: authenticate called.");
+		/*
+		 * UserProfileService profile =
+		 * userProfileService.findByEmail(authentication
+		 * .getPrincipal().toString());
+		 * 
+		 * if(profile == null){ throw new
+		 * UsernameNotFoundException(String.format("Invalid credentials",
+		 * authentication.getPrincipal())); }
+		 * 
+		 * String suppliedPasswordHash =
+		 * DigestUtils.shaHex(authentication.getCredentials().toString());
+		 * 
+		 * if(!profile.getPasswordHash().equals(suppliedPasswordHash)){ throw
+		 * new BadCredentialsException("Invalid credentials"); }
+		 */
+		// UsernamePasswordAuthenticationToken token = new
+		// UsernamePasswordAuthenticationToken(profile, null,
+		// profile.getAuthorities());
 
-    @Autowired
-    public VedetteAuthenticationProvider( UserProfileService userProfileService )
-    {
-        this.userProfileService = userProfileService;
-    }
+		// return token;
+		return null;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.security.authentication.AuthenticationProvider#supports
+	 * (java.lang.Class)
+	 */
+	@Override
+	public boolean supports(Class<?> aClass) {
+		LOG.trace("Method: supports called.");
 
-    /* (non-Javadoc)
-     * @see org.springframework.security.authentication.AuthenticationProvider#authenticate(org.springframework.security.core.Authentication)
-     */
-    @Override
-    public Authentication authenticate( Authentication authentication ) throws AuthenticationException
-    {
-        LOG.trace( "Method: authenticate called." );
-        /*
-        UserProfileService profile = userProfileService.findByEmail(authentication.getPrincipal().toString());
-        
-        if(profile == null){
-            throw new UsernameNotFoundException(String.format("Invalid credentials", authentication.getPrincipal()));
-        }
-        
-        String suppliedPasswordHash = DigestUtils.shaHex(authentication.getCredentials().toString());
-        
-        if(!profile.getPasswordHash().equals(suppliedPasswordHash)){
-            throw new BadCredentialsException("Invalid credentials");
-        }
-        */
-        // UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(profile, null, profile.getAuthorities());
+		return aClass.equals(UsernamePasswordAuthenticationToken.class);
 
-        //return token;
-        return null;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.springframework.security.authentication.AuthenticationProvider#supports(java.lang.Class)
-     */
-    @Override
-    public boolean supports( Class<?> aClass )
-    {
-        LOG.trace( "Method: supports called." );
-
-        return aClass.equals( UsernamePasswordAuthenticationToken.class );
-
-    }
+	}
 }
