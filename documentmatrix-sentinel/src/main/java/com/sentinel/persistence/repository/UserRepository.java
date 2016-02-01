@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sentinel.persistence.models.User;
 
+
 /**
  * @author Vipin Kumar
  * @created 28-Jan-2016
@@ -19,8 +20,9 @@ import com.sentinel.persistence.models.User;
  *          TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-@Transactional(readOnly = true)
-public interface UserRepository extends JpaRepository<User, Long> {
+@Transactional ( readOnly = true)
+public interface UserRepository extends JpaRepository<User, Long>
+{
 
-	User findByEmail(String email);
+    User findByEmail( String email );
 }

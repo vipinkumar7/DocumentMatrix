@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+
 /**
  * @author Vipin Kumar
  * @created 28-Jan-2016
@@ -26,95 +27,121 @@ import javax.persistence.ManyToMany;
  * 
  */
 @Entity
-public class Role {
+public class Role
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue ( strategy = GenerationType.AUTO)
+    private Long id;
 
-	@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-	private Collection<User> users;
+    @ManyToMany ( mappedBy = "roles", fetch = FetchType.EAGER)
+    private Collection<User> users;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "roles_permissions", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-	private Collection<Permission> permissions;
+    @ManyToMany ( fetch = FetchType.EAGER)
+    @JoinTable ( name = "roles_permissions", joinColumns = @JoinColumn ( name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn ( name = "permission_id", referencedColumnName = "id"))
+    private Collection<Permission> permissions;
 
-	private String name;
+    private String name;
 
-	public Role() {
-		super();
-	}
 
-	public Role(final String name) {
-		super();
-		this.name = name;
-	}
+    public Role()
+    {
+        super();
+    }
 
-	//
 
-	public Long getId() {
-		return id;
-	}
+    public Role( final String name )
+    {
+        super();
+        this.name = name;
+    }
 
-	public void setId(final Long id) {
-		this.id = id;
-	}
 
-	public String getName() {
-		return name;
-	}
+    //
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public Collection<User> getUsers() {
-		return users;
-	}
 
-	public void setUsers(final Collection<User> users) {
-		this.users = users;
-	}
+    public void setId( final Long id )
+    {
+        this.id = id;
+    }
 
-	public Collection<Permission> getPrivileges() {
-		return permissions;
-	}
 
-	public void setPrivileges(final Collection<Permission> permissions) {
-		this.permissions = permissions;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Role role = (Role) obj;
-		if (!role.equals(role.name)) {
-			return false;
-		}
-		return true;
-	}
+    public void setName( final String name )
+    {
+        this.name = name;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("Role [name=").append(name).append("]").append("[id=")
-				.append(id).append("]");
-		return builder.toString();
-	}
+
+    public Collection<User> getUsers()
+    {
+        return users;
+    }
+
+
+    public void setUsers( final Collection<User> users )
+    {
+        this.users = users;
+    }
+
+
+    public Collection<Permission> getPrivileges()
+    {
+        return permissions;
+    }
+
+
+    public void setPrivileges( final Collection<Permission> permissions )
+    {
+        this.permissions = permissions;
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
+        return result;
+    }
+
+
+    @Override
+    public boolean equals( final Object obj )
+    {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final Role role = (Role) obj;
+        if ( !role.equals( role.name ) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder();
+        builder.append( "Role [name=" ).append( name ).append( "]" ).append( "[id=" ).append( id ).append( "]" );
+        return builder.toString();
+    }
 }

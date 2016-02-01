@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sentinel.persistence.models.Role;
 
+
 /**
  * @author Vipin Kumar
  * @created 28-Jan-2016
@@ -19,7 +20,8 @@ import com.sentinel.persistence.models.Role;
  *          TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-@Transactional(readOnly = true)
-public interface RoleRepository extends JpaRepository<Role, Long> {
-	Role findByName(String name);
+@Transactional ( readOnly = true)
+public interface RoleRepository extends JpaRepository<Role, Long>
+{
+    Role findByName( String name );
 }

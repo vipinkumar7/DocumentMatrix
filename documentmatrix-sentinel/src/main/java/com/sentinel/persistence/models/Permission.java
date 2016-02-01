@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+
 /**
  * @author Vipin Kumar
  * @created 28-Jan-2016
@@ -25,83 +26,105 @@ import javax.persistence.ManyToMany;
  */
 // TODO MAking lazy loading
 @Entity
-public class Permission {
+public class Permission
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue ( strategy = GenerationType.AUTO)
+    private Long id;
 
-	private String name;
+    private String name;
 
-	@ManyToMany(mappedBy = "permissions", fetch = FetchType.EAGER)
-	private Collection<Role> roles;
+    @ManyToMany ( mappedBy = "permissions", fetch = FetchType.EAGER)
+    private Collection<Role> roles;
 
-	public Permission() {
-		super();
-	}
 
-	public Permission(final String name) {
-		super();
-		this.name = name;
-	}
+    public Permission()
+    {
+        super();
+    }
 
-	//
 
-	public Long getId() {
-		return id;
-	}
+    public Permission( final String name )
+    {
+        super();
+        this.name = name;
+    }
 
-	public void setId(final Long id) {
-		this.id = id;
-	}
 
-	public String getName() {
-		return name;
-	}
+    //
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public Collection<Role> getRoles() {
-		return roles;
-	}
 
-	public void setRoles(final Collection<Role> roles) {
-		this.roles = roles;
-	}
+    public void setId( final Long id )
+    {
+        this.id = id;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Permission permission = (Permission) obj;
-		if (!permission.equals(permission.name)) {
-			return false;
-		}
-		return true;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("Permission [name=").append(name).append("]")
-				.append("[id=").append(id).append("]");
-		return builder.toString();
-	}
+
+    public void setName( final String name )
+    {
+        this.name = name;
+    }
+
+
+    public Collection<Role> getRoles()
+    {
+        return roles;
+    }
+
+
+    public void setRoles( final Collection<Role> roles )
+    {
+        this.roles = roles;
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
+        return result;
+    }
+
+
+    @Override
+    public boolean equals( final Object obj )
+    {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final Permission permission = (Permission) obj;
+        if ( !permission.equals( permission.name ) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder();
+        builder.append( "Permission [name=" ).append( name ).append( "]" ).append( "[id=" ).append( id ).append( "]" );
+        return builder.toString();
+    }
 }

@@ -10,9 +10,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 /**
  * 
@@ -23,40 +25,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *
  */
 @Configuration
-@ComponentScan(basePackages = { "com.sentinel.service" })
+@ComponentScan ( basePackages = { "com.sentinel.service" })
 // TODO
 // @ImportResource({ "classpath:webSecurityConfig.xml" })
 @EnableWebSecurity
-public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecSecurityConfig extends WebSecurityConfigurerAdapter
+{
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-	// @Autowired
-	// private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-	// @Autowired
-	// private AuthenticationFailureHandler authenticationFailureHandler;
+    // @Autowired
+    // private AuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
-	public SecSecurityConfig() {
-		super();
-	}
+    // @Autowired
+    // private AuthenticationFailureHandler authenticationFailureHandler;
 
-	@Override
-	protected void configure(final AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.eraseCredentials(false);// so we can read them in controllers
-		auth.authenticationProvider(authProvider());
-	}
+    public SecSecurityConfig()
+    {
+        super();
+    }
 
-	@Override
-	public void configure(final WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/resources/**");
-	}
 
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		// @formatter:off
+    @Override
+    protected void configure( final AuthenticationManagerBuilder auth ) throws Exception
+    {
+        auth.eraseCredentials( false );// so we can read them in controllers
+        auth.authenticationProvider( authProvider() );
+    }
+
+
+    @Override
+    public void configure( final WebSecurity web ) throws Exception
+    {
+        web.ignoring().antMatchers( "/resources/**" );
+    }
+
+
+    @Override
+    protected void configure( final HttpSecurity http ) throws Exception
+    {
+        // @formatter:off
 		http.csrf()
 				.disable()
 				.authorizeRequests()
@@ -79,26 +89,32 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 				// .successHandler(myAuthenticationSuccessHandler)
 				// .failureHandler(authenticationFailureHandler)
 				.permitAll().and().sessionManagement()
-				.invalidSessionUrl("/invalidSession.html").sessionFixation()
-				.none().and().logout().invalidateHttpSession(false)
+				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+				.sessionFixation().newSession()//node in case application define this url
+				//.invalidSessionUrl("/invalidSession.html")
+				.and().logout().invalidateHttpSession(false)
 				.logoutSuccessUrl("/logout.html?logSucc=true")
 				.deleteCookies("JSESSIONID").permitAll();
 		// @formatter:on
-	}
+    }
 
-	// beans
 
-	@Bean
-	public DaoAuthenticationProvider authProvider() {
-		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(encoder());
-		return authProvider;
-	}
+    // beans
 
-	@Bean
-	public PasswordEncoder encoder() {
-		return new BCryptPasswordEncoder(11);
-	}
+    @Bean
+    public DaoAuthenticationProvider authProvider()
+    {
+        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService( userDetailsService );
+        authProvider.setPasswordEncoder( encoder() );
+        return authProvider;
+    }
+
+
+    @Bean
+    public PasswordEncoder encoder()
+    {
+        return new BCryptPasswordEncoder( 11 );
+    }
 
 }

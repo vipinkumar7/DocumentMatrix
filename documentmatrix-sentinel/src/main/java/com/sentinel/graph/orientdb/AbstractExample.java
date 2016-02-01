@@ -2,18 +2,25 @@ package com.sentinel.graph.orientdb;
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
 
-public abstract class AbstractExample {
 
-	private final String url;
+public abstract class AbstractExample
+{
 
-	public AbstractExample(String url) {
-		this.url = url;
-	}
+    private final String url;
 
-	public final void run() {
-		OrientGraphFactory graphFactory = new OrientGraphFactory(url);
-		runGraphExamples(graphFactory);
-	}
 
-	abstract protected void runGraphExamples(OrientGraphFactory graphFactory);
+    public AbstractExample( String url )
+    {
+        this.url = url;
+    }
+
+
+    public final void run()
+    {
+        OrientGraphFactory graphFactory = new OrientGraphFactory( url );
+        runGraphExamples( graphFactory );
+    }
+
+
+    abstract protected void runGraphExamples( OrientGraphFactory graphFactory );
 }

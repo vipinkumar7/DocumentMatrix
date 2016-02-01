@@ -19,6 +19,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+
 /**
  * 
  * @author Vipin Kumar
@@ -28,61 +29,74 @@ import org.springframework.web.servlet.view.JstlView;
  *
  */
 @Configuration
-@ComponentScan(basePackages = { "com.sentinel.web.controllers" })
+@ComponentScan ( basePackages = { "com.sentinel.web.controllers" })
 @EnableWebMvc
-public class MvcConfig extends WebMvcConfigurerAdapter {
+public class MvcConfig extends WebMvcConfigurerAdapter
+{
 
-	public MvcConfig() {
-		super();
-	}
+    public MvcConfig()
+    {
+        super();
+    }
 
-	@Override
-	public void addViewControllers(final ViewControllerRegistry registry) {
-		super.addViewControllers(registry);
-		registry.addViewController("/login");
-	}
 
-	//
+    @Override
+    public void addViewControllers( final ViewControllerRegistry registry )
+    {
+        super.addViewControllers( registry );
+        registry.addViewController( "/login" );
+    }
 
-	@Override
-	public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/",
-				"/resources/");
-	}
 
-	@Override
-	public void addInterceptors(final InterceptorRegistry registry) {
-		final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-		localeChangeInterceptor.setParamName("lang");
-		registry.addInterceptor(localeChangeInterceptor);
-	}
+    //
 
-	// beans
+    @Override
+    public void addResourceHandlers( final ResourceHandlerRegistry registry )
+    {
+        registry.addResourceHandler( "/resources/**" ).addResourceLocations( "/", "/resources/" );
+    }
 
-	@Bean
-	public ViewResolver viewResolver() {
-		final InternalResourceViewResolver bean = new InternalResourceViewResolver();
-		bean.setViewClass(JstlView.class);
-		bean.setPrefix("/WEB-INF/view/");
-		bean.setSuffix(".jsp");
-		return bean;
-	}
 
-	@Bean
-	public LocaleResolver localeResolver() {
-		final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-		cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
-		return cookieLocaleResolver;
-	}
+    @Override
+    public void addInterceptors( final InterceptorRegistry registry )
+    {
+        final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName( "lang" );
+        registry.addInterceptor( localeChangeInterceptor );
+    }
 
-	@Bean
-	public MessageSource messageSource() {
-		final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename("classpath:messages");
-		messageSource.setUseCodeAsDefaultMessage(true);
-		messageSource.setDefaultEncoding("UTF-8");
-		messageSource.setCacheSeconds(0);
-		return messageSource;
-	}
+
+    // beans
+
+    @Bean
+    public ViewResolver viewResolver()
+    {
+        final InternalResourceViewResolver bean = new InternalResourceViewResolver();
+        bean.setViewClass( JstlView.class );
+        bean.setPrefix( "/WEB-INF/view/" );
+        bean.setSuffix( ".jsp" );
+        return bean;
+    }
+
+
+    @Bean
+    public LocaleResolver localeResolver()
+    {
+        final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        cookieLocaleResolver.setDefaultLocale( Locale.ENGLISH );
+        return cookieLocaleResolver;
+    }
+
+
+    @Bean
+    public MessageSource messageSource()
+    {
+        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename( "classpath:messages" );
+        messageSource.setUseCodeAsDefaultMessage( true );
+        messageSource.setDefaultEncoding( "UTF-8" );
+        messageSource.setCacheSeconds( 0 );
+        return messageSource;
+    }
 
 }
