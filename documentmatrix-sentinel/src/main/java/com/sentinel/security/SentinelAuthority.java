@@ -2,7 +2,7 @@
  *  * Copyright (c) 2016 ;; 
  * All rights reserved. 
  * 
- *	Licenced under Beer License
+ *	Licensed under Beer License
  */
 package com.sentinel.security;
 
