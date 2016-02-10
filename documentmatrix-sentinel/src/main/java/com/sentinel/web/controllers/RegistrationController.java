@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.sentinel.exceptions.EmailExistsException;
-import com.sentinel.exceptions.UserAlreadyExistException;
 import com.sentinel.persistence.models.User;
 import com.sentinel.service.IUserService;
 import com.sentinel.web.dto.UserDto;
@@ -51,12 +50,11 @@ public class RegistrationController
         /* 
         if (userService.isUserExist(user)) {
             System.out.println("A User with name " + user.getUsername() + " already exist");
-            
         }
         */
         userService.saveRegisteredUser( registered );
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation( ucBuilder.path( "/user/{id}" ).buildAndExpand( registered.getId() ).toUri() );
+        headers.setLocation( ucBuilder.path( "/user/{id}" ).buildAndExpand( registered.getId() ).toUri() );//TODO
         return new ResponseEntity<Void>( headers, HttpStatus.CREATED );
     }
 
