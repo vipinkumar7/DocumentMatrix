@@ -81,7 +81,7 @@ public class UserProfileService implements UserDetailsService
         final List<String> permissions = new ArrayList<String>();
         final List<Permission> collection = new ArrayList<Permission>();
         for ( final Role role : roles ) {
-            collection.addAll( role.getPrivileges() );
+            collection.addAll( role.getPermissions() );
         }
         for ( final Permission item : collection ) {
             permissions.add( item.getName() );

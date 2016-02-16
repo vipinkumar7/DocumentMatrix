@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import com.sentinel.exceptions.EmailExistsException;
 import com.sentinel.persistence.models.User;
 import com.sentinel.service.IUserService;
@@ -38,11 +37,11 @@ public class RegistrationController
     @Autowired
     private IUserService userService;
 
-
     @RequestMapping ( value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser( @RequestBody UserDto accountDto, UriComponentsBuilder ucBuilder )
     {
 
+        LOG.debug( "Registring new user" );
         final User registered = createUserAccount( accountDto );
         if ( registered == null ) {
             return new ResponseEntity<Void>( HttpStatus.CONFLICT );
@@ -57,8 +56,7 @@ public class RegistrationController
         headers.setLocation( ucBuilder.path( "/user/{id}" ).buildAndExpand( registered.getId() ).toUri() );//TODO
         return new ResponseEntity<Void>( headers, HttpStatus.CREATED );
     }
-
-
+    
     private User createUserAccount( final UserDto accountDto )
     {
         User registered = null;

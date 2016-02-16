@@ -55,7 +55,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     {
         LOG.trace( "Method: getServletConfigClasses called." );
 
-        return new Class<?>[] { SecSecurityConfig.class, MvcConfig.class };
+        return new Class<?>[] { SecSecurityConfig.class, Oauth2ServerConfig.class,MvcConfig.class };
 
     }
 

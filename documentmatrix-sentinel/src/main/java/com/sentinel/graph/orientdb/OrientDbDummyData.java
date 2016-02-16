@@ -38,7 +38,70 @@ public class OrientDbDummyData
 
     public static void main( String[] args )
     {
-        new OrientDbDummyData().grantAccess( "admin", "FooBar1" );
+        new OrientDbDummyData().showForUser( "user2" );//inserDumyDataasUser();
+        //new OrientDbDummyData().grantAccess( "admin", "FooBar1" );
+    }
+
+
+    public void showForUser( String user )
+    {
+        TransactionalGraph odb = new OrientGraph( "remote:localhost/vipin", user, user );
+        ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
+        for ( ODocument doc : db.browseClass( TABLE_NAME ) ) {
+            System.out.println( doc.field( "Message" ) );
+        }
+        db.close();
+
+    }
+
+
+    public void inserDumyDataasUser()
+    {
+
+        String userd = "user2";
+        TransactionalGraph odb = new OrientGraph( "remote:localhost/vipin", "admin", "admin" );
+        ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
+
+
+        String role = "admin_Post";
+
+        db.commit();
+
+        OSecurity oSecurity = db.getMetadata().getSecurity();
+        ORole restrictedRole = oSecurity.createRole( role, OSecurityRole.ALLOW_MODES.DENY_ALL_BUT );
+        restrictedRole.addRule( ORule.ResourceGeneric.CLASS, TABLE_NAME, ORole.PERMISSION_CREATE + ORole.PERMISSION_UPDATE
+            + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.DATABASE, DATABASE, ORole.PERMISSION_CREATE + ORole.PERMISSION_UPDATE
+            + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.DATABASE, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.SCHEMA, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, TABLE_NAME, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
+        restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, OMetadataDefault.CLUSTER_INTERNAL_NAME, ORole.PERMISSION_CREATE
+            + ORole.PERMISSION_READ + ORole.PERMISSION_UPDATE );
+        restrictedRole.save();
+        restrictedRole.reload();
+
+
+        OUser user = oSecurity.createUser( userd, userd, "admin_Post" );
+        user.save();
+        db.commit();
+        db.close();
+
+        db.open( userd, userd );
+
+        OClass restricted = db.getMetadata().getSchema().getClass( "ORestricted" );
+        OClass docClass = db.getMetadata().getSchema().getOrCreateClass( TABLE_NAME, restricted );
+
+        ODocument doc1 = new ODocument( docClass );
+
+        // The restricted record...
+        doc1.field( "name", TABLE_NAME );
+        doc1.field( "Id", 3, OType.INTEGER );
+        doc1.field( "Message", "user3 document 1", OType.STRING );
+        doc1.save();
+        db.commit();
+        db.close();
     }
 
 
@@ -146,29 +209,6 @@ public class OrientDbDummyData
         List<ODocument> result = db.query( new OSQLSynchQuery<ODocument>( "select * from POST where Id=1" ) );
         for ( ODocument doc : result ) {
             db.getMetadata().getSecurity().allowRole( doc, OSecurityShared.ALLOW_READ_FIELD, dummyRole );
-        }
-    }
-
-
-    public void populateData( OrientGraphFactory graphFactory )
-    {
-        OrientGraph graph = graphFactory.getTx();
-        try {
-            OrientVertex me = graph.addVertex( "class:Person", "name", "Moi" );
-            OrientVertex you = graph.addVertex( "class:Person", "name", "Vous" );
-            you.setProperty( "age", 1 );
-            you.setProperty( "height", 2 );
-            OrientEdge knows = graph.addEdge( "class:Knows", me, you, "Knows" );
-            knows.setProperty( "since", new Date() );
-
-            Vertex random = graph.addVertex( null, "name", "Someone" );
-
-            graph.getRawGraph().getMetadata().getSecurity()
-                .allowUser( me.getRecord(), OSecurityShared.ALLOW_ALL_FIELD, "report" );
-
-            graph.commit();
-        } finally {
-            graph.shutdown();
         }
     }
 

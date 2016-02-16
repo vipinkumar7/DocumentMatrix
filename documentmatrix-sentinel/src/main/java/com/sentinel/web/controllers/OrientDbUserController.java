@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.UserRepository;
 import com.sentinel.service.OrientDbService;
+import com.sentinel.web.dto.OrientClassAdminRequest;
 
 
 /**
@@ -31,16 +33,16 @@ import com.sentinel.service.OrientDbService;
  */
 @Controller
 @RequestMapping ( value = "/graph")
-public class GraphController
+public class OrientDbUserController
 {
 
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( GraphController.class );
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( OrientDbUserController.class );
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;// use StandardPBEStringEncryptor
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     OrientDbService orientdbService;
@@ -68,5 +70,19 @@ public class GraphController
         User usr = userRepository.findByEmail( user );
         orientdbService.grantAccess( usr.getFirstName() );
     }
+    
+    
 
+    @RequestMapping(value="/create/class")
+    @PreAuthorize("hasRole('ORIENT_ADMIN')")
+    public void createTableandAdmin(@RequestBody  OrientClassAdminRequest classAdminRequest){
+        
+    }
+    
+    @RequestMapping(value="/change/password")
+    @PreAuthorize("hasRole('POWER_ADMIN')")
+    public void changeAdminPassword(){
+        
+    }
+    
 }

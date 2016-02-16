@@ -94,19 +94,6 @@ public class Role
         this.users = users;
     }
 
-
-    public Collection<Permission> getPrivileges()
-    {
-        return permissions;
-    }
-
-
-    public void setPrivileges( final Collection<Permission> permissions )
-    {
-        this.permissions = permissions;
-    }
-
-
     @Override
     public int hashCode()
     {
@@ -143,5 +130,23 @@ public class Role
         final StringBuilder builder = new StringBuilder();
         builder.append( "Role [name=" ).append( name ).append( "]" ).append( "[id=" ).append( id ).append( "]" );
         return builder.toString();
+    }
+
+
+    /**
+     * @return the permissions
+     */
+    public Collection<Permission> getPermissions()
+    {
+        return permissions;
+    }
+
+
+    /**
+     * @param permissions the permissions to set
+     */
+    public void setPermissions( final Collection<Permission> permissions )
+    {
+        this.permissions = permissions;
     }
 }

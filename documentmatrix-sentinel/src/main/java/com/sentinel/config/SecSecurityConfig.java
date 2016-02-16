@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,12 +27,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @ComponentScan ( basePackages = { "com.sentinel.service" })
-// TODO
-// @ImportResource({ "classpath:webSecurityConfig.xml" })
-@EnableWebSecurity
+@EnableWebMvcSecurity
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 {
 
+    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( SecSecurityConfig.class );
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -51,7 +51,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure( final AuthenticationManagerBuilder auth ) throws Exception
     {
-        auth.eraseCredentials( false );// so we can read them in controllers
+        //auth.eraseCredentials( false );// so we can read them in controllers
         auth.authenticationProvider( authProvider() );
     }
 
@@ -60,6 +60,20 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
     public void configure( final WebSecurity web ) throws Exception
     {
         web.ignoring().antMatchers( "/resources/**" );
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter#authenticationManagerBean()
+     */
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception
+    {
+        LOG.trace( "Method: authenticationManagerBean called." );
+
+        return super.authenticationManagerBean();
+
     }
 
 
@@ -88,13 +102,15 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 				.failureUrl("/login?error=true")
 				// .successHandler(myAuthenticationSuccessHandler)
 				// .failureHandler(authenticationFailureHandler)
-				.permitAll().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				.sessionFixation().newSession()//node in case application define this url
+				.permitAll();
+				//.and().sessionManagement()
+				//.invalidSessionUrl( "/all/invalid_session" )
+				//.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+				//.sessionFixation().newSession()//node in case application define this url
 				//.invalidSessionUrl("/invalidSession.html")
-				.and().logout().invalidateHttpSession(false)
-				.logoutSuccessUrl("/logout.html?logSucc=true")
-				.deleteCookies("JSESSIONID").permitAll();
+				//.and().logout().invalidateHttpSession(false)
+				//.logoutSuccessUrl("/logout.html?logSucc=true")
+				//.deleteCookies("JSESSIONID").permitAll();
 		// @formatter:on
     }
 
@@ -106,15 +122,19 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
     {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService( userDetailsService );
-        authProvider.setPasswordEncoder( encoder() );
+        authProvider.setPasswordEncoder( justEncoder() );
         return authProvider;
     }
 
 
     @Bean
-    public PasswordEncoder encoder()
+    public PasswordEncoder justEncoder()
     {
         return new BCryptPasswordEncoder( 11 );
     }
 
+    /*    @Bean
+        public PasswordEncoderDecoder dualEncoder(){
+            return new PasswordEncoderDecoder();
+        }*/
 }
