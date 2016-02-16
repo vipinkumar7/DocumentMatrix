@@ -5,6 +5,7 @@
  *	Licensed under Beer License
  */
 package com.sentinel.security;
+
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -54,8 +55,9 @@ public class PasswordEncoderDecoder implements PasswordEncoder
 
     }
 
-    
-    public String decode(String password){
+
+    public String decode( String password )
+    {
         return encoderdecoder.decrypt( password );
     }
 }

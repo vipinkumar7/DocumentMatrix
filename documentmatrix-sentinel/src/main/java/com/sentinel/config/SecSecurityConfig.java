@@ -1,20 +1,26 @@
 package com.sentinel.config;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.sentinel.persistence.repository.UserRepository;
+import com.sentinel.service.UserProfileService;
 
 
 /**
@@ -27,13 +33,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 @ComponentScan ( basePackages = { "com.sentinel.service" })
-@EnableWebMvcSecurity
+@EnableWebSecurity
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( SecSecurityConfig.class );
+
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserRepository userRepository;
+
+
+    private UserProfileService userProfileService;
+
+    private TokenAuthenticationService tokenAuthenticationService;
 
 
     // @Autowired
@@ -44,14 +56,22 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 
     public SecSecurityConfig()
     {
-        super();
+        super( true );
+    }
+
+
+    @PostConstruct
+    void init()
+    {
+        userProfileService = new UserProfileService( userRepository );
+        tokenAuthenticationService = new TokenAuthenticationService( "tooManySecrets", userProfileService );
+
     }
 
 
     @Override
     protected void configure( final AuthenticationManagerBuilder auth ) throws Exception
     {
-        //auth.eraseCredentials( false );// so we can read them in controllers
         auth.authenticationProvider( authProvider() );
     }
 
@@ -81,36 +101,23 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure( final HttpSecurity http ) throws Exception
     {
         // @formatter:off
-		http.csrf()
-				.disable()
-				.authorizeRequests()
-				.antMatchers("/login*", "/login*", "/logout*", "/signin/**",
-						"/signup/**")
-				.permitAll()
-				.antMatchers("/invalidSession*")
-				.anonymous()
-				// .antMatchers( "/graph/*").access(
-				// "hasRole('ROLE_RIGHT_access_management_screens" )
-				// .antMatchers( "/graph/**").hasRole( "READ_PRIVILEGE" )
-				.anyRequest()
-				.authenticated()
-				.and()
-				.formLogin()
-				.loginProcessingUrl("/login")
+		http.exceptionHandling().and()
+        .anonymous().and()
+        .servletApi().and()
+        .headers().cacheControl().and()
+        .authorizeRequests()
+        
 				// .loginPage("/login")
-				.defaultSuccessUrl("/homepage.html")
-				.failureUrl("/login?error=true")
 				// .successHandler(myAuthenticationSuccessHandler)
 				// .failureHandler(authenticationFailureHandler)
-				.permitAll();
-				//.and().sessionManagement()
-				//.invalidSessionUrl( "/all/invalid_session" )
-				//.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				//.sessionFixation().newSession()//node in case application define this url
-				//.invalidSessionUrl("/invalidSession.html")
-				//.and().logout().invalidateHttpSession(false)
-				//.logoutSuccessUrl("/logout.html?logSucc=true")
-				//.deleteCookies("JSESSIONID").permitAll();
+        .antMatchers( HttpMethod.POST, "/api/login" )
+				.permitAll()
+				.and()
+				// custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
+                .addFilterBefore(new StatelessLoginFilter("/api/login", tokenAuthenticationService, userProfileService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+
+				.addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
+				
 		// @formatter:on
     }
 
@@ -121,7 +128,7 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
     public DaoAuthenticationProvider authProvider()
     {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService( userDetailsService );
+        authProvider.setUserDetailsService( userDetailsService() );
         authProvider.setPasswordEncoder( justEncoder() );
         return authProvider;
     }
@@ -133,8 +140,19 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
         return new BCryptPasswordEncoder( 11 );
     }
 
-    /*    @Bean
-        public PasswordEncoderDecoder dualEncoder(){
-            return new PasswordEncoderDecoder();
-        }*/
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService()
+    {
+        return userProfileService;
+    }
+
+
+    @Bean
+    public TokenAuthenticationService tokenAuthenticationService()
+    {
+        return tokenAuthenticationService;
+    }
+
 }

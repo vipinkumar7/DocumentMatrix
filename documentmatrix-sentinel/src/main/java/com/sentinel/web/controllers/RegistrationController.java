@@ -37,6 +37,7 @@ public class RegistrationController
     @Autowired
     private IUserService userService;
 
+
     @RequestMapping ( value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser( @RequestBody UserDto accountDto, UriComponentsBuilder ucBuilder )
     {
@@ -56,7 +57,8 @@ public class RegistrationController
         headers.setLocation( ucBuilder.path( "/user/{id}" ).buildAndExpand( registered.getId() ).toUri() );//TODO
         return new ResponseEntity<Void>( headers, HttpStatus.CREATED );
     }
-    
+
+
     private User createUserAccount( final UserDto accountDto )
     {
         User registered = null;

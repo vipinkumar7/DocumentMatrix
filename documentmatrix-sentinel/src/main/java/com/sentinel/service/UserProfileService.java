@@ -11,15 +11,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import com.sentinel.persistence.models.Permission;
 import com.sentinel.persistence.models.Role;
@@ -34,16 +29,24 @@ import com.sentinel.persistence.repository.UserRepository;
  *          TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-
+/*
 @Service ( "userDetailsService")
-@Transactional
+@Transactional*/
 public class UserProfileService implements UserDetailsService
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( UserProfileService.class );
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+
+    /**
+     * 
+     */
+    public UserProfileService( UserRepository userRepository )
+    {
+        this.userRepository = userRepository;
+    }
 
 
     /*
@@ -53,7 +56,8 @@ public class UserProfileService implements UserDetailsService
      * loadUserByUsername(java.lang.String)
      */
     @Override
-    public UserDetails loadUserByUsername( String email ) throws UsernameNotFoundException
+    public org.springframework.security.core.userdetails.User loadUserByUsername( String email )
+        throws UsernameNotFoundException
     {
         LOG.trace( "Method: loadUserByUsername called." );
         try {

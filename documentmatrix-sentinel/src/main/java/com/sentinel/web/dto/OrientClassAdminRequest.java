@@ -19,8 +19,8 @@ public class OrientClassAdminRequest
     private String email;
     private String orientClassName;
     private String orientDatabse;
-    
-    
+
+
     /**
      * @return the orientClassName
      */
@@ -28,6 +28,8 @@ public class OrientClassAdminRequest
     {
         return orientClassName;
     }
+
+
     /**
      * @param orientClassName the orientClassName to set
      */
@@ -35,6 +37,8 @@ public class OrientClassAdminRequest
     {
         this.orientClassName = orientClassName;
     }
+
+
     /**
      * @return the orientDatabse
      */
@@ -42,6 +46,8 @@ public class OrientClassAdminRequest
     {
         return orientDatabse;
     }
+
+
     /**
      * @param orientDatabse the orientDatabse to set
      */
@@ -50,5 +56,5 @@ public class OrientClassAdminRequest
         this.orientDatabse = orientDatabse;
     }
 
-    
+
 }

@@ -6,6 +6,9 @@
  */
 package com.sentinel.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 /**
  * @author Vipin Kumar
@@ -17,15 +20,22 @@ package com.sentinel.web.dto;
 public class UserDto
 {
 
+
+    @JsonIgnore
     private String firstName;
 
+    @JsonIgnore
     private String lastName;
 
+    @JsonProperty ( "password")
     private String password;
 
+    @JsonIgnore
     private String matchingPassword;
 
+    @JsonProperty ( "username")
     private String email;
+
 
     /**
      * @return the firstName
@@ -35,6 +45,7 @@ public class UserDto
         return firstName;
     }
 
+
     /**
      * @param firstName the firstName to set
      */
@@ -42,6 +53,7 @@ public class UserDto
     {
         this.firstName = firstName;
     }
+
 
     /**
      * @return the lastName
@@ -51,6 +63,7 @@ public class UserDto
         return lastName;
     }
 
+
     /**
      * @param lastName the lastName to set
      */
@@ -58,6 +71,7 @@ public class UserDto
     {
         this.lastName = lastName;
     }
+
 
     /**
      * @return the password
@@ -67,6 +81,7 @@ public class UserDto
         return password;
     }
 
+
     /**
      * @param password the password to set
      */
@@ -74,6 +89,7 @@ public class UserDto
     {
         this.password = password;
     }
+
 
     /**
      * @return the matchingPassword
@@ -83,6 +99,7 @@ public class UserDto
         return matchingPassword;
     }
 
+
     /**
      * @param matchingPassword the matchingPassword to set
      */
@@ -91,6 +108,7 @@ public class UserDto
         this.matchingPassword = matchingPassword;
     }
 
+
     /**
      * @return the email
      */
@@ -98,6 +116,7 @@ public class UserDto
     {
         return email;
     }
+
 
     /**
      * @param email the email to set

@@ -7,6 +7,9 @@
  */
 package com.sentinel.config;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -55,7 +58,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     {
         LOG.trace( "Method: getServletConfigClasses called." );
 
-        return new Class<?>[] { SecSecurityConfig.class, Oauth2ServerConfig.class,MvcConfig.class };
+        return new Class<?>[] { SecSecurityConfig.class, MvcConfig.class };
 
     }
 
@@ -72,10 +75,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     {
         LOG.trace( "Method: onStartup called." );
 
+        EnumSet<DispatcherType> dispatch = EnumSet.of( DispatcherType.REQUEST );
         super.onStartup( servletContext );
         DelegatingFilterProxy filter = new DelegatingFilterProxy( "springSecurityFilterChain" );
         filter.setContextAttribute( "org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher" );
-        servletContext.addFilter( "springSecurityFilterChain", filter ).addMappingForUrlPatterns( null, false, "/*" );
+        servletContext.addFilter( "springSecurityFilterChain", filter ).addMappingForUrlPatterns( dispatch, false, "/*" );
 
         LOG.trace( "Method: onStartup finished." );
     }

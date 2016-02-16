@@ -70,19 +70,21 @@ public class OrientDbUserController
         User usr = userRepository.findByEmail( user );
         orientdbService.grantAccess( usr.getFirstName() );
     }
-    
-    
 
-    @RequestMapping(value="/create/class")
-    @PreAuthorize("hasRole('ORIENT_ADMIN')")
-    public void createTableandAdmin(@RequestBody  OrientClassAdminRequest classAdminRequest){
-        
+
+    @RequestMapping ( value = "/create/class")
+    @PreAuthorize ( "hasRole('ORIENT_ADMIN')")
+    public void createTableandAdmin( @RequestBody OrientClassAdminRequest classAdminRequest )
+    {
+
     }
-    
-    @RequestMapping(value="/change/password")
-    @PreAuthorize("hasRole('POWER_ADMIN')")
-    public void changeAdminPassword(){
-        
+
+
+    @RequestMapping ( value = "/change/password")
+    @PreAuthorize ( "hasRole('POWER_ADMIN')")
+    public void changeAdminPassword()
+    {
+
     }
-    
+
 }
