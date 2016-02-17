@@ -1,6 +1,5 @@
 package com.sentinel.graph.orientdb;
 
-import java.util.Date;
 import java.util.List;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
@@ -16,11 +15,7 @@ import com.orientechnologies.orient.core.metadata.security.OUser;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.tinkerpop.blueprints.TransactionalGraph;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.orient.OrientEdge;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
-import com.tinkerpop.blueprints.impls.orient.OrientVertex;
 
 
 /**
