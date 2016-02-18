@@ -20,6 +20,7 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.security.OSecurityShared;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
+import com.sentinel.web.dto.OrientAdminRequest;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory;
@@ -51,35 +52,34 @@ public class OrientDbService
     }
 
 
-    public String getData( String TABLE_NAME, String username )
-    {
-        OrientGraphFactory graphFactory = new OrientGraphFactory( path, username, username );
-        OrientGraph graph = graphFactory.getTx();
-        ODatabaseDocumentTx db = ( (OrientGraph) graph ).getRawGraph();
-        StringBuilder builder = new StringBuilder();
-        for ( ODocument doc : db.browseClass( TABLE_NAME ) ) {
-            builder.append( doc.field( "Message" ) );
-            builder.append( "\n" );
-        }
-        return builder.toString();
-    }
-
-
-    public void grantAccess( String user )
-    {
-        TransactionalGraph odb = new OrientGraph( "remote:localhost/vipin", user, user );
-        ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
-        List<ODocument> result = db.query( new OSQLSynchQuery<ODocument>( "select * from POST where Id=1" ) );
-        for ( ODocument doc : result ) {
-            db.getMetadata().getSecurity().allowRole( doc, OSecurityShared.ALLOW_READ_FIELD, "FooBar1" );
-        }
-    }
-
-
     @PreDestroy
     public void shutdown()
     {
         Orient.instance().shutdown();
+    }
+
+
+    /**
+     * 
+     */
+    public void createTableAndItsAdmin(String TABLE_NAME,OrientAdminRequest orientAdminRequest)
+    {
+        LOG.trace("Method: createTableAndItsAdmin called.");
+        
+        
+        LOG.trace("Method: createTableAndItsAdmin finished.");
+    }
+
+
+    /**
+     * @param tABLE_NAME
+     */
+    public void createAssociatedRolesAndPermission( String tABLE_NAME )
+    {
+        LOG.trace("Method: createAssociatedRolesAndPermission called.");
+        
+        
+        LOG.trace("Method: createAssociatedRolesAndPermission finished.");
     }
 
 }

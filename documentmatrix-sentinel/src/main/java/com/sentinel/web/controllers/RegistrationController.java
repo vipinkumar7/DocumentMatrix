@@ -29,6 +29,7 @@ import com.sentinel.web.dto.UserDto;
  * 
  */
 @Controller
+@RequestMapping(value="/register")
 public class RegistrationController
 {
 

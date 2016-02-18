@@ -110,8 +110,8 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 				// .loginPage("/login")
 				// .successHandler(myAuthenticationSuccessHandler)
 				// .failureHandler(authenticationFailureHandler)
-        .antMatchers( HttpMethod.POST, "/api/login" )
-				.permitAll()
+        .antMatchers( HttpMethod.POST, "/api/login" ).permitAll()
+        .antMatchers("/admin/orient/api**").hasRole("ADMIN_ORIENT")
 				.and()
 				// custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
                 .addFilterBefore(new StatelessLoginFilter("/api/login", tokenAuthenticationService, userProfileService, authenticationManager()), UsernamePasswordAuthenticationFilter.class)

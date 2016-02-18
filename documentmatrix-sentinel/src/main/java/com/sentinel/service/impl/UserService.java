@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sentinel.exceptions.EmailExistsException;
+import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.RoleRepository;
 import com.sentinel.persistence.repository.UserRepository;
@@ -194,5 +195,31 @@ public class UserService implements IUserService
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * @param user
+     * @param role
+     */
+    public void grantRole( User user, Role role )
+    {
+        LOG.trace("Method: grantRole called.");
+        
+        
+        LOG.trace("Method: grantRole finished.");
+    }
+
+
+    /**
+     * @param user
+     * @param role
+     */
+    public void revokeRole( User user, Role role )
+    {
+        LOG.trace("Method: revokeRole called.");
+        
+        
+        LOG.trace("Method: revokeRole finished.");
     }
 }

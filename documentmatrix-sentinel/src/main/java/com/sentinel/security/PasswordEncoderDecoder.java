@@ -29,6 +29,8 @@ public class PasswordEncoderDecoder implements PasswordEncoder
     public PasswordEncoderDecoder()
     {
         encoderdecoder = new StandardPBEStringEncryptor();
+        encoderdecoder.setPassword( "sentinel" );
+        encoderdecoder.setAlgorithm( "PBEWithMD5AndTripleDES" );
     }
 
 
