@@ -16,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,7 +24,6 @@ import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.UserRepository;
 import com.sentinel.service.OrientDbService;
 import com.sentinel.service.impl.UserService;
-import com.sentinel.web.dto.OrientAdminRequest;
 
 
 /**
@@ -61,13 +59,12 @@ public class OrientDbController
      * @param TABLE_NAME
      * @param orientAdminRequest
      */
-    @RequestMapping ( value = "/create/all/{TABLE_NAME}",method=RequestMethod.POST)
+    @RequestMapping ( value = "/create/all/{TABLE_NAME}/{DATABASE}",method=RequestMethod.POST)
     @PreAuthorize ( "hasRole('ROLE_ADMIN_ORIENT')")
-    public void createTableandAdmin(@PathVariable String TABLE_NAME, @RequestBody OrientAdminRequest orientAdminRequest )
+    public void createTableandAdmin(@PathVariable String TABLE_NAME, @PathVariable String DATABASE )
     {
         LOG.debug( "Creating all Roles and Permission for Table"+ TABLE_NAME );
-        orientdbService.createTableAndItsAdmin(TABLE_NAME,orientAdminRequest);
-        orientdbService.createAssociatedRolesAndPermission(TABLE_NAME);
+        orientdbService.createAssociatedRolesAndPermission(TABLE_NAME,DATABASE);
     }
     
     

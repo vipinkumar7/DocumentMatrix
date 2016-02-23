@@ -33,6 +33,8 @@ public class OrientDbDummyData
 
     public static void main( String[] args )
     {
+
+        
         new OrientDbDummyData().showForUser( "user2" );//inserDumyDataasUser();
         //new OrientDbDummyData().grantAccess( "admin", "FooBar1" );
     }
