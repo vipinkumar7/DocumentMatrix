@@ -21,9 +21,10 @@ import com.orientechnologies.orient.core.metadata.security.ORole;
 import com.orientechnologies.orient.core.metadata.security.ORule;
 import com.orientechnologies.orient.core.metadata.security.OSecurity;
 import com.orientechnologies.orient.core.metadata.security.OSecurityRole;
+import com.orientechnologies.orient.core.metadata.security.OUser;
 import com.sentinel.graph.orientdb.OrientRole;
 import com.sentinel.service.impl.UserService;
-import com.sentinel.web.dto.OrientAdminRequest;
+import com.sentinel.web.dto.ShieldUserRequest;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
@@ -67,9 +68,19 @@ public class OrientDbService
     /**
      * 
      */
-    public void createTableAndItsAdmin( String TABLE_NAME, OrientAdminRequest orientAdminRequest )
+    public void createUserAdmin()
     {
         LOG.trace( "Method: createTableAndItsAdmin called." );
+
+        TransactionalGraph odb = new OrientGraph( path, "admin", "admin" );
+        ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
+        //start creating admin role
+        db.commit();
+        OSecurity oSecurity = db.getMetadata().getSecurity();
+        OUser user = oSecurity.createUser( "", "", "" );
+        user.save();
+        db.commit();
+        db.close();
 
 
         LOG.trace( "Method: createTableAndItsAdmin finished." );
@@ -87,7 +98,7 @@ public class OrientDbService
         ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
 
         //start creating admin role
-        String role = OrientRole.ROLE_TABLE_ADMIN + "_" + TABLE_NAME;
+        String role = OrientRole.ROLE_ORIENT_TABLE_ADMIN + "_" + TABLE_NAME;
         db.commit();
         OSecurity oSecurity = db.getMetadata().getSecurity();
         ORole restrictedRole = oSecurity.createRole( role, OSecurityRole.ALLOW_MODES.DENY_ALL_BUT );
@@ -107,7 +118,7 @@ public class OrientDbService
         restrictedRole.reload();
 
         //start creating user role 
-        role = OrientRole.ROLE_TABLE_USER + "_" + TABLE_NAME;
+        role = OrientRole.ROLE_ORIENT_TABLE_USER + "_" + TABLE_NAME;
         // create role
         ORole restrictedRoleUser = oSecurity.createRole( role, OSecurityRole.ALLOW_MODES.DENY_ALL_BUT );
         restrictedRoleUser.addRule( ORule.ResourceGeneric.CLASS, TABLE_NAME, ORole.PERMISSION_CREATE );
@@ -119,8 +130,7 @@ public class OrientDbService
             ORole.PERMISSION_READ );
         restrictedRoleUser.save();
         restrictedRoleUser.reload();
-        
-        
+
 
         db.commit();
         db.close();

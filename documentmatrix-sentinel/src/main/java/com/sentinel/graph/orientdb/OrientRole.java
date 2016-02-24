@@ -26,5 +26,5 @@ public enum OrientRole
        System.out.println(role);
      * */
 
-    ROLE_TABLE_ADMIN, ROLE_TABLE_USER
+    ROLE_ORIENT_TABLE_ADMIN, ROLE_ORIENT_TABLE_USER
 }

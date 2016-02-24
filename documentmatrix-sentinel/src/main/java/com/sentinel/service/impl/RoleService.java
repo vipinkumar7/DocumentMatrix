@@ -6,6 +6,8 @@
  */
 package com.sentinel.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +43,22 @@ public class RoleService implements IRoleService
      * @see com.sentinel.service.IRoleService#createRole(java.lang.String, java.util.Set)
      */
     @Override
-    public Role createRole( String name, Set<Permission> permissions )
+    public Role createRole( String name, Set<String> permissions )
     {
         LOG.trace( "Method: createRole called." );
 
-        return null;
-
+        Role role = roleRepository.findByName( name );
+        if ( role == null ) {
+            role = new Role( name );
+        }
+        List<Permission> newPermissions = new ArrayList<>();
+        for ( String newPermission : permissions ) {
+            Permission permission = permissionRepository.findByName( newPermission );
+            if ( permission == null ) {
+                newPermissions.add( new Permission( newPermission ) );
+            }
+        }
+        role.setPermissions( newPermissions );
+        return role;
     }
 }

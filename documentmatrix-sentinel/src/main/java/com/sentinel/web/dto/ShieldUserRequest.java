@@ -13,7 +13,7 @@ package com.sentinel.web.dto;
  * request for new creating new class in orient database
  * 
  */
-public class OrientAdminRequest
+public class ShieldUserRequest
 {
 
     private String email;

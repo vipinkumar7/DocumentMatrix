@@ -7,6 +7,7 @@
 package com.sentinel.service.impl;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.transaction.Transactional;
 
@@ -37,7 +38,7 @@ public class UserService implements IUserService
 {
 
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -67,7 +68,7 @@ public class UserService implements IUserService
         user.setEmail( accountDto.getEmail() );
 
         user.setRoles( Arrays.asList( roleRepository.findByName( "ROLE_NONE" ) ) );
-        return repository.save( user );
+        return userRepository.save( user );
 
     }
 
@@ -92,7 +93,7 @@ public class UserService implements IUserService
     public void saveRegisteredUser( User user )
     {
         LOG.trace( "Method: saveRegisteredUser called." );
-        repository.save( user );
+        userRepository.save( user );
         LOG.trace( "Method: saveRegisteredUser finished." );
     }
 
@@ -190,7 +191,7 @@ public class UserService implements IUserService
 
     private boolean emailExist( final String email )
     {
-        final User user = repository.findByEmail( email );
+        final User user = userRepository.findByEmail( email );
         if ( user != null ) {
             return true;
         }
@@ -204,10 +205,11 @@ public class UserService implements IUserService
      */
     public void grantRole( User user, Role role )
     {
-        LOG.trace("Method: grantRole called.");
-        
-        
-        LOG.trace("Method: grantRole finished.");
+        LOG.trace( "Method: grantRole called." );
+        Collection<Role> roles = user.getRoles();
+        roles.add( role );
+        user.setRoles( roles );
+        LOG.trace( "Method: grantRole finished." );
     }
 
 
@@ -217,9 +219,9 @@ public class UserService implements IUserService
      */
     public void revokeRole( User user, Role role )
     {
-        LOG.trace("Method: revokeRole called.");
-        
-        
-        LOG.trace("Method: revokeRole finished.");
+        LOG.trace( "Method: revokeRole called." );
+
+
+        LOG.trace( "Method: revokeRole finished." );
     }
 }
