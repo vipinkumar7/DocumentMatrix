@@ -40,6 +40,7 @@ public class LoginController
     @RequestMapping ( method = RequestMethod.GET, value = "/login_success")
     public @ResponseBody String handleLoginSuccess( Principal principal )
     {
+        LOG.debug( "successfull login" );
         return SecurityUtil.getUserRoles().toString();
     }
 

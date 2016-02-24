@@ -42,7 +42,7 @@ public class HttpLogoutSuccessHandler implements LogoutSuccessHandler
 
         response.setStatus( HttpServletResponse.SC_OK );
         response.getWriter().flush();
-        
+
         LOG.trace( "Method: onLogoutSuccess finished." );
     }
 }

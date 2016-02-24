@@ -35,7 +35,7 @@ import com.tinkerpop.blueprints.impls.orient.OrientGraph;
  */
 public class TestGraphDb
 {
-    
+
     //    mvn -Dtest=TestGraphDb#showDataForAllUsers test
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( TestGraphDb.class );
@@ -49,12 +49,12 @@ public class TestGraphDb
     final String[] dummyRole = { "admin_Post", "FooBar" };
     final String[] dummyUsers = { "admin", "user1", "user2" };
 
-    
+
     @Test
     public void showDataForAllUsers()
     {
         for ( String user : dummyUsers ) {
-            System.out.println("Documents for user:"+ user);
+            System.out.println( "Documents for user:" + user );
             TransactionalGraph odb = new OrientGraph( path, user, user );
             ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
             for ( ODocument doc : db.browseClass( TABLE_NAME ) ) {
@@ -128,7 +128,7 @@ public class TestGraphDb
         restrictedRole.addRule( ORule.ResourceGeneric.SCHEMA, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
         restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
         restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, TABLE_NAME, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
-        restrictedRole.addRule( ORule.ResourceGeneric.COMMAND, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ);
+        restrictedRole.addRule( ORule.ResourceGeneric.COMMAND, null, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
         restrictedRole.addRule( ORule.ResourceGeneric.COMMAND, TABLE_NAME, ORole.PERMISSION_CREATE + ORole.PERMISSION_READ );
         restrictedRole.addRule( ORule.ResourceGeneric.CLUSTER, OMetadataDefault.CLUSTER_INTERNAL_NAME, ORole.PERMISSION_CREATE
             + ORole.PERMISSION_READ + ORole.PERMISSION_UPDATE );
@@ -151,12 +151,12 @@ public class TestGraphDb
     @Test
     public void inserDataForAllUsers()
     {
-        LOG.trace("Method: inserDataForAllUsers called.");
-        
+        LOG.trace( "Method: inserDataForAllUsers called." );
+
         TransactionalGraph odb = new OrientGraph( path, dummyUsers[0], dummyUsers[0] );
         ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
-        
-        
+
+
         db.commit();
         OClass restricted = db.getMetadata().getSchema().getClass( "ORestricted" );
         OClass docClass = db.getMetadata().getSchema().getOrCreateClass( TABLE_NAME, restricted );
@@ -178,13 +178,13 @@ public class TestGraphDb
         doc2.save();
         db.commit();
         db.close();
-        LOG.trace("Method: inserDataForAllUsers finished.");
-        
-        
+        LOG.trace( "Method: inserDataForAllUsers finished." );
+
+
         db.open( dummyUsers[1], dummyUsers[1] );
 
-         doc1 = new ODocument( docClass );
-         doc2 = new ODocument( docClass );
+        doc1 = new ODocument( docClass );
+        doc2 = new ODocument( docClass );
 
         // The restricted record...
         doc1.field( "name", TABLE_NAME );
@@ -195,13 +195,14 @@ public class TestGraphDb
         doc2.field( "Id", 4, OType.INTEGER );
         doc2.field( "Message", "user1 document 2", OType.STRING );
         doc2.save();
-        
+
         db.commit();
         db.close();
     }
 
+
     @Test
-    public void grantAccess(  )
+    public void grantAccess()
     {
         TransactionalGraph odb = new OrientGraph( path, dummyUsers[0], dummyUsers[0] );
         ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
@@ -210,10 +211,10 @@ public class TestGraphDb
             db.getMetadata().getSecurity().allowRole( doc, OSecurityShared.ALLOW_READ_FIELD, dummyRole[1] );
             doc.save();
         }
-        
+
         db.commit();
         db.close();
-        
+
     }
-   
+
 }

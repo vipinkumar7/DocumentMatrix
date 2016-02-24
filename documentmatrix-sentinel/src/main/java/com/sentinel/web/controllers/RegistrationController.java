@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.sentinel.exceptions.EmailExistsException;
 import com.sentinel.persistence.models.User;
 import com.sentinel.service.IUserService;
-import com.sentinel.web.dto.UserDto;
+import com.sentinel.web.dto.UserForm;
 
 
 /**
@@ -29,7 +30,7 @@ import com.sentinel.web.dto.UserDto;
  * 
  */
 @Controller
-@RequestMapping(value="/register")
+@RequestMapping ( value = "/register")
 public class RegistrationController
 {
 
@@ -40,7 +41,7 @@ public class RegistrationController
 
 
     @RequestMapping ( value = "/user/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser( @RequestBody UserDto accountDto, UriComponentsBuilder ucBuilder )
+    public ResponseEntity<Void> createUser( @RequestBody UserForm accountDto, UriComponentsBuilder ucBuilder )
     {
 
         LOG.debug( "Registring new user" );
@@ -60,7 +61,7 @@ public class RegistrationController
     }
 
 
-    private User createUserAccount( final UserDto accountDto )
+    private User createUserAccount( final UserForm accountDto )
     {
         User registered = null;
         try {

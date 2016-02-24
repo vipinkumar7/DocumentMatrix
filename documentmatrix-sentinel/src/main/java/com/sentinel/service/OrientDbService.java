@@ -24,7 +24,6 @@ import com.orientechnologies.orient.core.metadata.security.OSecurityRole;
 import com.orientechnologies.orient.core.metadata.security.OUser;
 import com.sentinel.graph.orientdb.OrientRole;
 import com.sentinel.service.impl.UserService;
-import com.sentinel.web.dto.ShieldUserRequest;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
 
@@ -71,7 +70,6 @@ public class OrientDbService
     public void createUserAdmin()
     {
         LOG.trace( "Method: createTableAndItsAdmin called." );
-
         TransactionalGraph odb = new OrientGraph( path, "admin", "admin" );
         ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
         //start creating admin role
@@ -81,8 +79,6 @@ public class OrientDbService
         user.save();
         db.commit();
         db.close();
-
-
         LOG.trace( "Method: createTableAndItsAdmin finished." );
     }
 

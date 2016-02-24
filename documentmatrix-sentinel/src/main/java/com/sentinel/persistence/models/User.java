@@ -48,12 +48,20 @@ public class User
 
     private boolean tokenExpired;
 
-    //
 
-
+    /*
+     * associated roles to user
+     */
     @ManyToMany ( fetch = FetchType.EAGER)
     @JoinTable ( name = "users_roles", joinColumns = @JoinColumn ( name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn ( name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
+
+    /*
+     * associated requests to user 
+     */
+    @ManyToMany ( fetch = FetchType.EAGER)
+    @JoinTable ( name = "user_requests", joinColumns = @JoinColumn ( name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn ( name = "role_id", referencedColumnName = "id"))
+    private Collection<UserRequest> requests;
 
 
     public User()
@@ -197,6 +205,24 @@ public class User
         builder.append( "User [firstName=" ).append( firstName ).append( "]" ).append( "[lastName=" ).append( lastName )
             .append( "]" ).append( "[username" ).append( email ).append( "]" );
         return builder.toString();
+    }
+
+
+    /**
+     * @return the requests
+     */
+    public Collection<UserRequest> getRequests()
+    {
+        return requests;
+    }
+
+
+    /**
+     * @param requests the requests to set
+     */
+    public void setRequests( Collection<UserRequest> requests )
+    {
+        this.requests = requests;
     }
 
 

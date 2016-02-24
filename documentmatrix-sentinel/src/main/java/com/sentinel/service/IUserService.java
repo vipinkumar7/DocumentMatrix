@@ -8,7 +8,7 @@ package com.sentinel.service;
 
 import com.sentinel.exceptions.EmailExistsException;
 import com.sentinel.persistence.models.User;
-import com.sentinel.web.dto.UserDto;
+import com.sentinel.web.dto.UserForm;
 
 
 /**
@@ -21,7 +21,7 @@ import com.sentinel.web.dto.UserDto;
 public interface IUserService
 {
 
-    User registerNewUserAccount( UserDto accountDto ) throws EmailExistsException;
+    User registerNewUserAccount( UserForm accountDto ) throws EmailExistsException;
 
 
     User getUser( String verificationToken );

@@ -6,26 +6,59 @@
  */
 package com.sentinel.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 
 /**
  * @author Vipin Kumar
- * @created 09-Feb-2016
+ * @created 24-Feb-2016
  * 
  * TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-public class UserDto
+public class UserForm
 {
+    private String firstName;
 
+    private String lastName;
 
-    @JsonProperty ( "password")
     private String password;
 
-
-    @JsonProperty ( "username")
     private String email;
+
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName( String firstName )
+    {
+        this.firstName = firstName;
+    }
+
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName( String lastName )
+    {
+        this.lastName = lastName;
+    }
 
 
     /**
@@ -62,6 +95,5 @@ public class UserDto
     {
         this.email = email;
     }
-
 
 }

@@ -15,13 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sentinel.commons.CommonNouns;
 import com.sentinel.exceptions.EmailExistsException;
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.RoleRepository;
 import com.sentinel.persistence.repository.UserRepository;
 import com.sentinel.service.IUserService;
-import com.sentinel.web.dto.UserDto;
+import com.sentinel.web.dto.UserForm;
 
 
 /**
@@ -51,10 +52,10 @@ public class UserService implements IUserService
 
 
     /* (non-Javadoc)
-     * @see com.sentinel.service.IUserService#registerNewUserAccount(com.sentinel.web.dto.UserDto)
+     * @see com.sentinel.service.IUserService#registerNewUserAccount(com.sentinel.web.dto.UserForm)
      */
     @Override
-    public User registerNewUserAccount( UserDto accountDto ) throws EmailExistsException
+    public User registerNewUserAccount( UserForm accountDto ) throws EmailExistsException
     {
         LOG.trace( "Method: registerNewUserAccount called." );
         if ( emailExist( accountDto.getEmail() ) ) {
@@ -64,10 +65,11 @@ public class UserService implements IUserService
 
         user.setFirstName( accountDto.getFirstName() );
         user.setLastName( accountDto.getLastName() );
+        //hash the password with our encoder
         user.setPassword( passwordEncoder.encode( accountDto.getPassword() ) );
         user.setEmail( accountDto.getEmail() );
 
-        user.setRoles( Arrays.asList( roleRepository.findByName( "ROLE_NONE" ) ) );
+        user.setRoles( Arrays.asList( roleRepository.findByName( CommonNouns.ROLE_NONE ) ) );
         return userRepository.save( user );
 
     }

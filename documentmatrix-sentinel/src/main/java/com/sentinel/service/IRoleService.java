@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.sentinel.persistence.models.Role;
 
+
 /**
  * @author Vipin Kumar
  * @created 23-Feb-2016
@@ -19,5 +20,5 @@ import com.sentinel.persistence.models.Role;
  */
 public interface IRoleService
 {
-    Role createRole(String name,Set<String> permissions);
+    Role createRole( String name, Set<String> permissions );
 }

@@ -16,13 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sentinel.config.UserAuthentication;
 
 
 /**
@@ -63,7 +61,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
         response.setStatus( HttpServletResponse.SC_OK );
         UserDetails userdetails = (UserDetails) authentication.getPrincipal();
 
-        
+
         LOG.info( userdetails.getUsername() + " got is connected " );
 
         PrintWriter writer = response.getWriter();
