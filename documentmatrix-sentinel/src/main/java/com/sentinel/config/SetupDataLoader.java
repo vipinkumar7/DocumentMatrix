@@ -48,31 +48,36 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
         System.out.println( "==============================" );
-        // == create initial permissions
-        final Permission readPermission = createPermissionIfNotFound( "READ_PRIVILEGE" );
-        final Permission writePermission = createPermissionIfNotFound( "WRITE_PRIVILEGE" );
+        /**
+         *== create initial permissions
+         *Admin for all database should be initialized at start time 
+         */
+        final Permission superPermission = createPermissionIfNotFound( "SUPER_ADMIN_PRIVILEGE" );
+        final Permission orientPermission = createPermissionIfNotFound( "ORIENT_ADMIN_PRIVILEGE" );
+        final Permission simpleUserPermission = createPermissionIfNotFound( "SIMPLE_USER_PRIVILEGE" );
 
         // == create initial roles
-        final List<Permission> adminPermission = Arrays.asList( readPermission, writePermission );
-        createRoleIfNotFound( "ROLE_ADMIN", adminPermission );
-        createRoleIfNotFound( "ROLE_USER", Arrays.asList( readPermission ) );
+        final List<Permission> powerAdminPermission = Arrays.asList( superPermission, orientPermission );
+        createRoleIfNotFound( "ROLE_POWER_ADMIN", powerAdminPermission );
+        createRoleIfNotFound( "ROLE_ORIENT_ADMIN", Arrays.asList( orientPermission ) );
+        createRoleIfNotFound( "ROLE_SIMPLE_USER", Arrays.asList( simpleUserPermission ) );
 
-        final Role adminRole = roleRepository.findByName( "ROLE_ADMIN" );
+        final Role adminRole = roleRepository.findByName( "ROLE_POWER_ADMIN" );
         final User user = new User();
-        user.setFirstName( "admin" );
+        user.setFirstName( "power" );
         user.setLastName( "admin" );
-        user.setPassword( passwordEncoder.encode( "admin" ) );
-        user.setEmail( "admin@test.com" );
+        user.setPassword( passwordEncoder.encode( "power_admin" ) );
+        user.setEmail( "power.admin@test.com" );
         user.setRoles( Arrays.asList( adminRole ) );
         user.setEnabled( true );
         userRepository.save( user );
 
-        final Role adminRole1 = roleRepository.findByName( "ROLE_USER" );
+        final Role adminRole1 = roleRepository.findByName( "ROLE_ORINET_ADMIN" );
         final User user1 = new User();
-        user1.setFirstName( "user1" );
-        user1.setLastName( "user1" );
-        user1.setPassword( passwordEncoder.encode( "user1" ) );
-        user1.setEmail( "user1@test.com" );
+        user1.setFirstName( "admin" );
+        user1.setLastName( "admin" );
+        user1.setPassword( passwordEncoder.encode( "admin" ) );
+        user1.setEmail( "orient.admin@test.com" );
         user1.setRoles( Arrays.asList( adminRole1 ) );
         user1.setEnabled( true );
         userRepository.save( user1 );

@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sentinel.commons.CommonNouns;
+import com.sentinel.commons.CommonConstants;
 import com.sentinel.exceptions.EmailExistsException;
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
@@ -69,7 +69,7 @@ public class UserService implements IUserService
         user.setPassword( passwordEncoder.encode( accountDto.getPassword() ) );
         user.setEmail( accountDto.getEmail() );
 
-        user.setRoles( Arrays.asList( roleRepository.findByName( CommonNouns.ROLE_NONE ) ) );
+        user.setRoles( Arrays.asList( roleRepository.findByName( CommonConstants.ROLE_NONE ) ) );
         return userRepository.save( user );
 
     }

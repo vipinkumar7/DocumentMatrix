@@ -13,7 +13,7 @@ package com.sentinel.commons;
  * TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-public class CommonNouns
+public class CommonConstants
 {
     public static final String ROLE_NONE = "ROLE_NONE";
 }

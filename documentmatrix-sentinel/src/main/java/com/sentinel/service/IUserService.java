@@ -7,6 +7,7 @@
 package com.sentinel.service;
 
 import com.sentinel.exceptions.EmailExistsException;
+import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
 import com.sentinel.web.dto.UserForm;
 
@@ -50,4 +51,9 @@ public interface IUserService
 
     boolean checkIfValidOldPassword( User user, String password );
 
+
+    public void grantRole( User user, Role role );
+
+
+    public void revokeRole( User user, Role role );
 }

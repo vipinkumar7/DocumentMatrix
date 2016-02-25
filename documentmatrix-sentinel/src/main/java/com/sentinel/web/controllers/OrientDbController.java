@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.UserRepository;
+import com.sentinel.service.IUserService;
 import com.sentinel.service.OrientDbService;
 import com.sentinel.service.impl.UserService;
 
@@ -41,7 +42,7 @@ public class OrientDbController
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( OrientDbController.class );
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -59,7 +60,7 @@ public class OrientDbController
      * @param orientAdminRequest
      */
     @RequestMapping ( value = "/create/all/{TABLE_NAME}/{DATABASE}", method = RequestMethod.POST)
-    @PreAuthorize ( "hasRole('ROLE_ADMIN_ORIENT')")
+    @PreAuthorize ( "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     public void createTableandAdmin( @PathVariable String TABLE_NAME, @PathVariable String DATABASE )
     {
         LOG.debug( "Creating all Roles and Permission for Table" + TABLE_NAME );
@@ -73,15 +74,23 @@ public class OrientDbController
      * @param role
      * @return
      */
-    @RequestMapping ( value = "/admin/api/users/{user}/grant/role/{role}", method = RequestMethod.POST)
-    @PreAuthorize ( value = "hasRole('ROLE_ADMIN_ORIENT')")
+    @RequestMapping ( value = "/users/{user}/grant/role/{role}", method = RequestMethod.POST)
+    @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     public ResponseEntity<String> grantRole( @PathVariable User user, @PathVariable Role role )
     {
         if ( user == null ) {
             return new ResponseEntity<String>( "invalid user id", HttpStatus.UNPROCESSABLE_ENTITY );
         }
         userService.grantRole( user, role );
-        userRepository.saveAndFlush( user );
+
+
+        boolean found = orientdbService.checkForUserInOrient( user.getEmail() )
+            && orientdbService.checkForRoleInOrient( role.getName() );
+        if ( found ) {
+            orientdbService.createRole( user.getEmail(), role.getName() );
+            userRepository.saveAndFlush( user );
+        } else
+            return new ResponseEntity<String>( "user or role already exist", HttpStatus.UNPROCESSABLE_ENTITY );
         return new ResponseEntity<String>( "role granted", HttpStatus.OK );
 
 
@@ -94,8 +103,8 @@ public class OrientDbController
      * @param role
      * @return
      */
-    @RequestMapping ( value = "/admin/api/users/{user}/revoke/role/{role}", method = RequestMethod.POST)
-    @PreAuthorize ( value = "hasRole('ROLE_ADMIN_ORIENT')")
+    @RequestMapping ( value = "/users/{user}/revoke/role/{role}", method = RequestMethod.POST)
+    @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     public ResponseEntity<String> revokeRole( @PathVariable User user, @PathVariable Role role )
     {
         if ( user == null ) {
@@ -111,7 +120,7 @@ public class OrientDbController
      * get all the users 
      * @return
      */
-    @PreAuthorize ( value = "hasRole('ROLE_ADMIN_ORIENT')")
+    @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     @RequestMapping ( value = "/users", method = RequestMethod.GET)
     public List<User> list()
     {

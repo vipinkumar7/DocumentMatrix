@@ -20,10 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.sentinel.persistence.repository.UserRepository;
-import com.sentinel.rest.handlers.AuthFailureHandler;
-import com.sentinel.rest.handlers.AuthSuccessHandler;
-import com.sentinel.rest.handlers.HttpAuthenticationEntryPoint;
-import com.sentinel.rest.handlers.HttpLogoutSuccessHandler;
 import com.sentinel.service.UserProfileService;
 
 
@@ -51,19 +47,20 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
 
     private TokenAuthenticationService tokenAuthenticationService;
 
-    @Autowired
-    private HttpAuthenticationEntryPoint httpAuthenticationEntryPoint;
 
-    @Autowired
-    private AuthSuccessHandler authSuccessHandler;
+    /*    @Autowired
+        private HttpAuthenticationEntryPoint httpAuthenticationEntryPoint;
 
-    @Autowired
-    private AuthFailureHandler authFailureHandler;
+        @Autowired
+        private AuthSuccessHandler authSuccessHandler;
+
+        @Autowired
+        private AuthFailureHandler authFailureHandler;
 
 
-    @Autowired
-    private HttpLogoutSuccessHandler httpLogoutSuccessHandler;
-
+        @Autowired
+        private HttpLogoutSuccessHandler httpLogoutSuccessHandler;
+    */
 
     public SecSecurityConfig()
     {

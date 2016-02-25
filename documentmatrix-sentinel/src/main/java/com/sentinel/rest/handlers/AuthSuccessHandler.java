@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-@Component
+//@Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler
 {
 
@@ -42,7 +42,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
     /**
      * 
      */
-    @Autowired
+    //@Autowired
     public AuthSuccessHandler( MappingJackson2HttpMessageConverter converter )
     {
         this.mapper = converter.getObjectMapper();
