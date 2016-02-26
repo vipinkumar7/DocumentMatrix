@@ -13,6 +13,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.orientechnologies.orient.core.Orient;
@@ -26,6 +28,7 @@ import com.orientechnologies.orient.core.metadata.security.OSecurityRole;
 import com.orientechnologies.orient.core.metadata.security.OUser;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
+import com.sentinel.commons.CommonConstants;
 import com.sentinel.graph.orientdb.OrientRole;
 import com.tinkerpop.blueprints.TransactionalGraph;
 import com.tinkerpop.blueprints.impls.orient.OrientGraph;
@@ -45,6 +48,9 @@ public class OrientDbService
 {
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger( OrientDbService.class );
+
+    @Autowired
+    private Environment env;
 
     private final String path = "remote:localhost/vipin";
 
@@ -70,7 +76,8 @@ public class OrientDbService
     public void createRole( String newUser, String role )
     {
         LOG.trace( "Method: createTableAndItsAdmin called." );
-        TransactionalGraph odb = new OrientGraph( path, "admin", "admin" );
+        TransactionalGraph odb = new OrientGraph( path, env.getProperty( CommonConstants.ORIENT_ADMIN ),
+            env.getProperty( CommonConstants.ORIENT_PASSWORD ) );
         ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
         db.commit();
         OSecurity oSecurity = db.getMetadata().getSecurity();

@@ -16,4 +16,16 @@ package com.sentinel.commons;
 public class CommonConstants
 {
     public static final String ROLE_NONE = "ROLE_NONE";
+
+    public static final String ORIENT_ADMIN = "orient.admin";
+
+    public static final String ORIENT_PASSWORD = "orient.password";
+
+    public static final String ORIENT_HOST = "orient.host";
+
+    public static final String ORIENT_PORT = "orient.port";
+
+    public static final String ORIENT_DB = "orient.db";
+
+
 }

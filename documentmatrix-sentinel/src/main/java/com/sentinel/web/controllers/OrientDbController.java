@@ -18,13 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
 import com.sentinel.persistence.repository.UserRepository;
 import com.sentinel.service.IUserService;
 import com.sentinel.service.OrientDbService;
-import com.sentinel.service.impl.UserService;
 
 
 /**
@@ -35,7 +35,7 @@ import com.sentinel.service.impl.UserService;
  * 
  */
 @Controller
-@RequestMapping ( value = "/admin/orient/api")
+@RequestMapping ( value = "/orient/api")
 public class OrientDbController
 {
 
@@ -60,11 +60,13 @@ public class OrientDbController
      * @param orientAdminRequest
      */
     @RequestMapping ( value = "/create/all/{TABLE_NAME}/{DATABASE}", method = RequestMethod.POST)
+    @ResponseBody
     @PreAuthorize ( "hasRole('ORIENT_ADMIN_PRIVILEGE')")
-    public void createTableandAdmin( @PathVariable String TABLE_NAME, @PathVariable String DATABASE )
+    public ResponseEntity<String> createTableandAdmin( @PathVariable String TABLE_NAME, @PathVariable String DATABASE )
     {
         LOG.debug( "Creating all Roles and Permission for Table" + TABLE_NAME );
         orientdbService.createAssociatedRolesAndPermission( TABLE_NAME, DATABASE );
+        return new ResponseEntity<String>( "associated roles and permission creaded ", HttpStatus.OK );
     }
 
 
@@ -75,6 +77,7 @@ public class OrientDbController
      * @return
      */
     @RequestMapping ( value = "/users/{user}/grant/role/{role}", method = RequestMethod.POST)
+    @ResponseBody
     @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     public ResponseEntity<String> grantRole( @PathVariable User user, @PathVariable Role role )
     {
@@ -104,6 +107,7 @@ public class OrientDbController
      * @return
      */
     @RequestMapping ( value = "/users/{user}/revoke/role/{role}", method = RequestMethod.POST)
+    @ResponseBody
     @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     public ResponseEntity<String> revokeRole( @PathVariable User user, @PathVariable Role role )
     {
@@ -121,6 +125,7 @@ public class OrientDbController
      * @return
      */
     @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
+    @ResponseBody
     @RequestMapping ( value = "/users", method = RequestMethod.GET)
     public List<User> list()
     {
