@@ -15,6 +15,39 @@ package com.sentinel.commons;
  */
 public enum RequestType
 {
-    ADMIN_DB, ADMIN_TABLE, READ_TABLE, READ_RECORD, READ_PARTITION, READ_COLUMN
+    ADMIN_DB( "ADMIN_DB" ),
+    ADMIN_TABLE( "ADMIN_TABLE" ),
+    READ_TABLE( "READ_TABLE" ),
+    READ_RECORD( "READ_RECORD" ),
+    READ_PARTITION( "READ_PARTITION" ),
+    READ_COLUMN( "READ_COLUMN" );
 
+    private String name;
+
+
+    /**
+     * 
+     */
+    private RequestType( String name )
+    {
+        this.name = name;
+    }
+
+
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+
+    /**
+     * @param name the name to set
+     */
+    public void setName( String name )
+    {
+        this.name = name;
+    }
 }

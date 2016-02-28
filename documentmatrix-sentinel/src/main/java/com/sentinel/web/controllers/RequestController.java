@@ -12,10 +12,13 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sentinel.config.UserAuthentication;
@@ -33,7 +36,7 @@ import com.sentinel.web.dto.OrientRequestDetails;
  * TODO: Write a quick description of what the class is supposed to do.
  * 
  */
-
+@Controller
 @RequestMapping ( value = "/request")
 public class RequestController
 {
@@ -49,6 +52,8 @@ public class RequestController
 
 
     @RequestMapping ( value = "", method = RequestMethod.POST)
+    @PreAuthorize ( value = "hasRole('SIMPLE_USER_PRIVILEGE')")
+    @ResponseBody
     public ResponseEntity<Void> createRequest( @RequestBody UserRequest userRequest )
     {
         LOG.debug( "creating new Request " );
@@ -68,5 +73,25 @@ public class RequestController
         return new ResponseEntity<Void>( HttpStatus.CREATED );
     }
 
-
+    /* public static void main( String[] args ) throws JsonProcessingException
+    {
+         OrientRequestDetails details=new OrientRequestDetails();
+         
+         details.setClassName( "ACCOUNT" );
+         details.setDatabaseName( "vipin" );
+         
+         String s=new ObjectMapper().writeValueAsString( details );
+         System.out.println(s);
+         
+         UserRequest request=new  UserRequest();
+         
+         request.setDatabaseType( Database.ORIENT );
+         request.setRequestType( RequestType.ADMIN_TABLE );
+         request.setRequestDetails( s );
+         
+         String p=new ObjectMapper().writeValueAsString(request);
+         System.out.println(p);
+         
+    }
+    */
 }

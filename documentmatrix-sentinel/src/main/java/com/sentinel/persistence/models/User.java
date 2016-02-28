@@ -19,6 +19,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * @author Vipin Kumar
@@ -41,11 +43,13 @@ public class User
 
     private String email;
 
+    @JsonIgnore
     @Column ( length = 60)
     private String password;
 
     private boolean enabled;
 
+    @JsonIgnore
     private boolean tokenExpired;
 
 

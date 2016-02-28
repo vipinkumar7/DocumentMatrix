@@ -27,5 +27,17 @@ public class CommonConstants
 
     public static final String ORIENT_DB = "orient.db";
 
+    public static final String ROLE_SIMPLE_USER = "ROLE_SIMPLE_USER";
 
+    public static final String ROLE_POWER_ADMIN = "ROLE_POWER_ADMIN";
+
+    public static final String ROLE_ORIENT_ADMIN = "ROLE_ORIENT_ADMIN";
+
+    public static final String SUPER_ADMIN_PRIVILEGE = "SUPER_ADMIN_PRIVILEGE";
+
+    public static final String ORIENT_ADMIN_PRIVILEGE = "ORIENT_ADMIN_PRIVILEGE";
+
+    public static final String SIMPLE_USER_PRIVILEGE = "SIMPLE_USER_PRIVILEGE";
+
+    public static final String NONE_PRIVILEGE = "NONE_PRIVILEGE";
 }

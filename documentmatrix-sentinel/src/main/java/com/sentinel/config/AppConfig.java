@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 
 
 @Configuration
-@PropertySource({ "classpath:orientdb.properties" })
+@PropertySource ( { "classpath:orientdb.properties" })
 @ComponentScan ( basePackages = { "com.sentinel" })
 public class AppConfig
 {

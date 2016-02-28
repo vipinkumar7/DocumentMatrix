@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sentinel.commons.CommonConstants;
 import com.sentinel.persistence.models.Permission;
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
@@ -52,17 +53,19 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
          *== create initial permissions
          *Admin for all database should be initialized at start time 
          */
-        final Permission superPermission = createPermissionIfNotFound( "SUPER_ADMIN_PRIVILEGE" );
-        final Permission orientPermission = createPermissionIfNotFound( "ORIENT_ADMIN_PRIVILEGE" );
-        final Permission simpleUserPermission = createPermissionIfNotFound( "SIMPLE_USER_PRIVILEGE" );
+        final Permission superPermission = createPermissionIfNotFound( CommonConstants.SUPER_ADMIN_PRIVILEGE );
+        final Permission orientPermission = createPermissionIfNotFound( CommonConstants.ORIENT_ADMIN_PRIVILEGE );
+        final Permission simpleUserPermission = createPermissionIfNotFound( CommonConstants.SIMPLE_USER_PRIVILEGE );
+        final Permission nonePermission = createPermissionIfNotFound( CommonConstants.NONE_PRIVILEGE );
 
         // == create initial roles
         final List<Permission> powerAdminPermission = Arrays.asList( superPermission, orientPermission );
-        createRoleIfNotFound( "ROLE_POWER_ADMIN", powerAdminPermission );
-        createRoleIfNotFound( "ROLE_ORIENT_ADMIN", Arrays.asList( orientPermission ) );
-        createRoleIfNotFound( "ROLE_SIMPLE_USER", Arrays.asList( simpleUserPermission ) );
+        createRoleIfNotFound( CommonConstants.ROLE_POWER_ADMIN, powerAdminPermission );
+        createRoleIfNotFound( CommonConstants.ROLE_ORIENT_ADMIN, Arrays.asList( orientPermission ) );
+        createRoleIfNotFound( CommonConstants.ROLE_SIMPLE_USER, Arrays.asList( simpleUserPermission ) );
+        createRoleIfNotFound( CommonConstants.ROLE_NONE, Arrays.asList( nonePermission ) );
 
-        final Role adminRole = roleRepository.findByName( "ROLE_POWER_ADMIN" );
+        final Role adminRole = roleRepository.findByName( CommonConstants.ROLE_POWER_ADMIN );
         final User user = new User();
         user.setFirstName( "power" );
         user.setLastName( "admin" );
@@ -72,7 +75,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         user.setEnabled( true );
         userRepository.save( user );
 
-        final Role adminRole1 = roleRepository.findByName( "ROLE_ORINET_ADMIN" );
+        final Role adminRole1 = roleRepository.findByName( CommonConstants.ROLE_ORIENT_ADMIN );
         final User user1 = new User();
         user1.setFirstName( "admin" );
         user1.setLastName( "admin" );

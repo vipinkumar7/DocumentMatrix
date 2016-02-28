@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * @author Vipin Kumar
@@ -35,6 +37,7 @@ public class Permission
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany ( mappedBy = "permissions", fetch = FetchType.EAGER)
     private Collection<Role> roles;
 

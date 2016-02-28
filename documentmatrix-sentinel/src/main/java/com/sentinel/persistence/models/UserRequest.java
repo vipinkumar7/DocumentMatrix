@@ -8,13 +8,17 @@ package com.sentinel.persistence.models;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sentinel.commons.Database;
 import com.sentinel.commons.RequestType;
 import com.sentinel.persistence.models.User;
@@ -35,9 +39,12 @@ public class UserRequest
     @GeneratedValue ( strategy = GenerationType.AUTO)
     private Long id;
     private String requestDetails;
-    private Database database;
+    @Column ( columnDefinition = "TEXT")
+    private Database databaseType;
+    @Column ( columnDefinition = "TEXT")
     private RequestType requestType;
 
+    @JsonIgnore
     @ManyToMany ( mappedBy = "requests", fetch = FetchType.EAGER)
     private Collection<User> users;
 
@@ -54,27 +61,10 @@ public class UserRequest
     /**
      * @param requestDetails the requestDetails to set
      */
+    @Enumerated ( EnumType.STRING)
     public void setRequestDetails( String requestDetails )
     {
         this.requestDetails = requestDetails;
-    }
-
-
-    /**
-     * @return the database
-     */
-    public Database getDatabase()
-    {
-        return database;
-    }
-
-
-    /**
-     * @param database the database to set
-     */
-    public void setDatabase( Database database )
-    {
-        this.database = database;
     }
 
 
@@ -129,6 +119,25 @@ public class UserRequest
     public void setId( Long id )
     {
         this.id = id;
+    }
+
+
+    /**
+     * @return the databaseType
+     */
+    @Enumerated ( EnumType.STRING)
+    public Database getDatabaseType()
+    {
+        return databaseType;
+    }
+
+
+    /**
+     * @param databaseType the databaseType to set
+     */
+    public void setDatabaseType( Database databaseType )
+    {
+        this.databaseType = databaseType;
     }
 
 }

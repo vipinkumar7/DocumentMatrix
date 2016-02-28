@@ -41,7 +41,7 @@ public class RegistrationController
     private IUserService userService;
 
 
-    @RequestMapping ( value = "/user/", method = RequestMethod.POST)
+    @RequestMapping ( value = "/user", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Void> createUser( @RequestBody UserForm accountDto, UriComponentsBuilder ucBuilder )
     {

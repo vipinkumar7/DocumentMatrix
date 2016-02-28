@@ -124,9 +124,9 @@ public class OrientDbController
      * get all the users 
      * @return
      */
+    @RequestMapping ( value = "/users", method = RequestMethod.GET)
     @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
     @ResponseBody
-    @RequestMapping ( value = "/users", method = RequestMethod.GET)
     public List<User> list()
     {
         return userRepository.findAll();

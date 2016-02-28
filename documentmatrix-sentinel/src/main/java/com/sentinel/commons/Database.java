@@ -15,5 +15,34 @@ package com.sentinel.commons;
  */
 public enum Database
 {
-    ORIENT, HIVE, HBASE, ELASTIC
+
+    ORIENT( "ORIENT" ), HIVE( "HIVE" ), HBASE( "HBASE" ), ELASTIC( "ELASTIC" );
+
+    private String name;
+
+
+    Database( String name )
+    {
+        this.name = name;
+    }
+
+
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+
+    /**
+     * @param name the name to set
+     */
+    public void setName( String name )
+    {
+        this.name = name;
+    }
+
+
 }

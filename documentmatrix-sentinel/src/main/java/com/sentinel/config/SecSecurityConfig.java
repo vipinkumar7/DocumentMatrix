@@ -116,7 +116,10 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter
         .authorizeRequests()
         
         .antMatchers( HttpMethod.POST, "/api/login" ).permitAll()
-        .antMatchers("/orient/api/**").hasRole("ADMIN_ORIENT")
+        .antMatchers( HttpMethod.POST,"/register" ).permitAll()
+        .antMatchers( "/request" ).access( "hasRole('SIMPLE_USER_PRIVILEGE')" )
+        .antMatchers( "/admin/**" ).access( "hasRole('SUPER_ADMIN_PRIVILEGE')" )
+        .antMatchers("/orient/api/**").access( "hasRole('ORIENT_ADMIN_PRIVILEGE')" )
         .anyRequest().authenticated()
 				.and()
 				// custom JSON based authentication by POST of {"username":"<name>","password":"<password>"} which sets the token header upon authentication
