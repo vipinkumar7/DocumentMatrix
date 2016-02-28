@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sentinel.persistence.models.Permission;
 import com.sentinel.persistence.models.Role;
@@ -26,6 +28,8 @@ import com.sentinel.service.IRoleService;
  * TODO: Write a quick description of what the class is supposed to do.
  * 
  */
+@Service
+@Transactional
 public class RoleService implements IRoleService
 {
 
@@ -52,13 +56,15 @@ public class RoleService implements IRoleService
             role = new Role( name );
         }
         List<Permission> newPermissions = new ArrayList<>();
-        for ( String newPermission : permissions ) {
-            Permission permission = permissionRepository.findByName( newPermission );
-            if ( permission == null ) {
-                newPermissions.add( new Permission( newPermission ) );
+        if ( permissions != null ) {
+            for ( String newPermission : permissions ) {
+                Permission permission = permissionRepository.findByName( newPermission );
+                if ( permission == null ) {
+                    newPermissions.add( new Permission( newPermission ) );
+                }
             }
+            role.setPermissions( newPermissions );
         }
-        role.setPermissions( newPermissions );
-        return role;
+        return roleRepository.save( role );
     }
 }

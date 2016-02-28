@@ -44,10 +44,12 @@ public class TestGraphDb
 
     final String TABLE_NAME = "POST";
 
+    final String TABLE_NAME2 = "ACCOUNT";
+
     final String DATABASE = "vipin";
 
-    final String[] dummyRole = { "admin_Post", "FooBar" };
-    final String[] dummyUsers = { "admin", "user1", "user2" };
+    final String[] dummyRole = { "admin_Post", "FooBar", "ROLE_ORIENT_TABLE_ADMIN_ACCOUNT" };
+    final String[] dummyUsers = { "admin", "user1", "user2", "vipin@vipin.com" };
 
 
     @Test
@@ -58,6 +60,10 @@ public class TestGraphDb
             TransactionalGraph odb = new OrientGraph( path, user, user );
             ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
             for ( ODocument doc : db.browseClass( TABLE_NAME ) ) {
+
+                System.out.println( doc.field( "Message" ) );
+            }
+            for ( ODocument doc : db.browseClass( TABLE_NAME2 ) ) {
 
                 System.out.println( doc.field( "Message" ) );
             }
@@ -217,4 +223,37 @@ public class TestGraphDb
 
     }
 
+
+    @Test
+    public void inserAccountDataForUser()
+    {
+        TransactionalGraph odb = new OrientGraph( path, dummyUsers[3], dummyUsers[3] );
+        ODatabaseDocumentTx db = ( (OrientGraph) odb ).getRawGraph();
+
+
+        db.commit();
+        OClass restricted = db.getMetadata().getSchema().getClass( "ORestricted" );
+        OClass docClass = db.getMetadata().getSchema().getOrCreateClass( TABLE_NAME2, restricted );
+
+        ODocument doc1 = new ODocument( docClass );
+        ODocument doc2 = new ODocument( docClass );
+
+        // The restricted record...
+        doc1.field( "name", TABLE_NAME );
+        doc1.field( "Id", 1, OType.INTEGER );
+        doc1.field( "account", "data", OType.STRING );
+        doc1.field( "Message", "Account document 1", OType.STRING );
+        doc1.save();
+
+        // The unrestricted record...
+        doc2.field( "name", TABLE_NAME );
+        doc2.field( "Id", 2, OType.INTEGER );
+        doc1.field( "account", "data", OType.STRING );
+        doc2.field( "Message", "Account document 2", OType.STRING );
+        db.getMetadata().getSecurity().allowRole( doc2, OSecurityShared.ALLOW_READ_FIELD, dummyRole[1] );
+        doc2.save();
+        db.commit();
+        db.close();
+
+    }
 }

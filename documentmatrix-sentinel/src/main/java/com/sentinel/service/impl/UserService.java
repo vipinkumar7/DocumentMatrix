@@ -226,4 +226,6 @@ public class UserService implements IUserService
 
         LOG.trace( "Method: revokeRole finished." );
     }
+
+
 }

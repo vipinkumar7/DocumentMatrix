@@ -8,6 +8,9 @@
 package com.sentinel.web.controllers;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sentinel.persistence.models.Role;
 import com.sentinel.persistence.models.User;
+import com.sentinel.persistence.repository.RoleRepository;
 import com.sentinel.persistence.repository.UserRepository;
+import com.sentinel.service.IRoleService;
 import com.sentinel.service.IUserService;
 import com.sentinel.service.OrientDbService;
 
@@ -45,10 +50,16 @@ public class OrientDbController
     private IUserService userService;
 
     @Autowired
+    private IRoleService roleService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     OrientDbService orientdbService;
@@ -65,7 +76,11 @@ public class OrientDbController
     public ResponseEntity<String> createTableandAdmin( @PathVariable String TABLE_NAME, @PathVariable String DATABASE )
     {
         LOG.debug( "Creating all Roles and Permission for Table" + TABLE_NAME );
-        orientdbService.createAssociatedRolesAndPermission( TABLE_NAME, DATABASE );
+        Map<String, Set<String>> rolesAndPerms = orientdbService.createAssociatedRolesAndPermission( TABLE_NAME, DATABASE );
+        Set<Entry<String, Set<String>>> rAndP = rolesAndPerms.entrySet();
+        for ( Entry<String, Set<String>> r : rAndP ) {
+            roleService.createRole( r.getKey(), r.getValue() );
+        }
         return new ResponseEntity<String>( "associated roles and permission creaded ", HttpStatus.OK );
     }
 
@@ -76,21 +91,23 @@ public class OrientDbController
      * @param role
      * @return
      */
-    @RequestMapping ( value = "/users/{user}/grant/role/{role}", method = RequestMethod.POST)
+    @RequestMapping ( value = "/users/{userId}/grant/role/{roleId}", method = RequestMethod.POST)
     @ResponseBody
     @PreAuthorize ( value = "hasRole('ORIENT_ADMIN_PRIVILEGE')")
-    public ResponseEntity<String> grantRole( @PathVariable User user, @PathVariable Role role )
+    public ResponseEntity<String> grantRole( @PathVariable Long userId, @PathVariable Long roleId )
     {
+        User user = userRepository.findOne( userId );
+        Role role = roleRepository.findOne( roleId );
         if ( user == null ) {
             return new ResponseEntity<String>( "invalid user id", HttpStatus.UNPROCESSABLE_ENTITY );
         }
         userService.grantRole( user, role );
 
-
+        //TODO break down to create user  separately with none role +  same password 
         boolean found = orientdbService.checkForUserInOrient( user.getEmail() )
             && orientdbService.checkForRoleInOrient( role.getName() );
         if ( found ) {
-            orientdbService.createRole( user.getEmail(), role.getName() );
+            orientdbService.grantUserRole( user.getEmail(), role.getName() );
             userRepository.saveAndFlush( user );
         } else
             return new ResponseEntity<String>( "user or role already exist", HttpStatus.UNPROCESSABLE_ENTITY );
