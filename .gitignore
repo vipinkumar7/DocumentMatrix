@@ -12,4 +12,9 @@ documentmatrix-sentinel/.project
 documentmatrix-sentinel/.settings/*
 documentmatrix-sentinel/.classpath
 documentmatrix-sentinel/bin/*
+documentmatrix-util/target/*
+documentmatrix-util/.project
+documentmatrix-util/.settings/*
+documentmatrix-util/.classpath
+documentmatrix-util/bin/*
 
